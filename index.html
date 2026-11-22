@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Robot's Dictionary</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="How a dictionary a computer can read (an ontology) taught eleven large language models to program ColourMix's syringe pumps: try the job, watch the dictionary being built, see the results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: an institutional page (a header band with the author, a section bar, then numbered sections), in a bottle-
+   green and paper palette of its own; each section pairs short reading (left) with something to try (right), stacked on
+   phones. The three dyes keep their own colours. */
+:root{
+  --bg:#f6f5f0; --panel:#ffffff; --sunk:#ecebe3; --ink:#16201c; --muted:#56615b; --line:#d8d8cd;
+  --band:#0f3d33; --band-ink:#f2f1e9; --band-muted:#bccbc2; --band-accent:#a4e3bf; --band-line:#2b5a4e;
+  --accent:#0e6a4e; --accent-ink:#ffffff; --accent-soft:#d6ece1; --good:#17733a; --bad:#b3261e;
+  --code-bg:#132019; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#24443a;
+  --red:#d42a3c; --yellow:#efb400; --blue:#2453d6; --water:#6fbfe2; --air:#a8b2ad; --waste:#7b6a54; --nothing:#a2a69b; --vial:#16201c;
+  --f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1412; --panel:#151d1a; --sunk:#1c2622; --ink:#e7eee9; --muted:#a7b5ae; --line:#2c3833;
+  --band:#0a2a22; --band-ink:#eef3ef; --band-muted:#a9bdb2; --band-accent:#8fdcae; --band-line:#22463c;
+  --accent:#6fd3a2; --accent-ink:#06231a; --accent-soft:#1f3a31; --good:#5fca86; --bad:#ff8174;
+  --code-bg:#0a110e; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#1f3a31;
+  --red:#ef4458; --yellow:#f6c21c; --blue:#5b84ff; --water:#7fcbec; --air:#8b958f; --waste:#9c8a71; --nothing:#7a7f75; --vial:#e7eee9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1412; --panel:#151d1a; --sunk:#1c2622; --ink:#e7eee9; --muted:#a7b5ae; --line:#2c3833;
+  --band:#0a2a22; --band-ink:#eef3ef; --band-muted:#a9bdb2; --band-accent:#8fdcae; --band-line:#22463c;
+  --accent:#6fd3a2; --accent-ink:#06231a; --accent-soft:#1f3a31; --good:#5fca86; --bad:#ff8174;
+  --code-bg:#0a110e; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#1f3a31;
+  --red:#ef4458; --yellow:#f6c21c; --blue:#5b84ff; --water:#7fcbec; --air:#8b958f; --waste:#9c8a71; --nothing:#7a7f75; --vial:#e7eee9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--f-body)}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-body);font-weight:800;letter-spacing:-.025em;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(38px,6vw,76px)}
+h2{font-size:clamp(27px,3.1vw,40px)}
+p{margin:0;max-width:62ch}
+b{font-weight:700}
+.eyebrow{font:700 13px/1.3 var(--f-body);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* the header band: title, the author, the section bar */
+.band{background:var(--band);color:var(--band-ink);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.band .eyebrow{color:var(--band-muted);max-width:none}
+.band .eyebrow a{color:var(--band-ink);text-decoration-color:var(--band-accent);text-underline-offset:3px}
+.band :focus-visible{outline-color:var(--band-accent)}
+.hero{padding-block:clamp(34px,5.5vw,72px) clamp(26px,3.5vw,40px);display:grid;gap:20px}
+.hero h1 em{font-style:normal;color:var(--band-accent)}
+.herogrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;align-items:end}
+.lede{font-size:clamp(18px,1.55vw,21px);max-width:60ch;color:var(--band-ink)}
+.author{display:flex;gap:14px;align-items:center;text-decoration:none;border:1px solid var(--band-line);border-radius:var(--r);padding:12px 14px;min-width:0}
+.author:hover{border-color:var(--band-accent)}
+.avatar{position:relative;width:72px;height:72px;border-radius:50%;overflow:hidden;flex:none;background:var(--band-line);display:grid;place-items:center}
+.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.avatar .initials{font:800 24px/1 var(--f-body);color:var(--band-ink)}
+.author .who{display:grid;gap:2px;font-size:14.5px;color:var(--band-muted);min-width:0}
+.author .who b{font-size:17px;color:var(--band-ink)}
+.author .who u{text-decoration:none;color:var(--band-accent);font-weight:600}
+.secbar{border-top:1px solid var(--band-line)}
+.secbar nav{display:flex;gap:4px 18px;overflow-x:auto;padding-block:12px;font-size:14.5px;font-weight:600;white-space:nowrap}
+.secbar a{text-decoration:none;color:var(--band-muted)}
+.secbar a:hover{color:var(--band-ink)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-block:26px 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.stat .big{font:800 clamp(30px,3.4vw,44px)/1 var(--f-body);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .big span{color:var(--accent)}
+.stat p{margin-top:8px;font-size:15px;color:var(--muted)}
+
+/* a section */
+.step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3.4vw,48px);padding-block:clamp(36px,5vw,64px);border-top:1px solid var(--line);align-items:start;scroll-margin-top:10px}
+.step>.text{display:grid;gap:16px;align-content:start;min-width:0}
+.step>.work{min-width:0;display:grid;gap:14px}
+.step.split{grid-template-areas:"p1 w" "p2 w";grid-template-rows:auto 1fr}
+.step.split>.p1{grid-area:p1} .step.split>.p2{grid-area:p2} .step.split>.work{grid-area:w}
+.sticky{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:800 15px/1 var(--f-body);margin-right:8px;vertical-align:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.note{font-size:14px;color:var(--muted)}
+.term{font-weight:700;color:var(--accent)}
+
+/* controls */
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:8px 14px;font-weight:600;font-size:15px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 16px;font-weight:600;font-size:15px}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.label{font:700 12px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:86px}
+
+/* the robot */
+svg{display:block;width:100%;height:auto}
+.rig text{font-family:var(--f-body);fill:var(--ink)}
+.rig .lab{font-size:15px;font-weight:600}
+.rig .small{font-size:12px;fill:var(--muted)}
+.rig .tube{fill:none;stroke-width:4;stroke-linecap:round;opacity:.42;transition:opacity .2s,stroke-width .2s}
+.rig .tube.hot{opacity:1;stroke-width:6}
+.rig .portdot{cursor:pointer}
+.rig .portdot circle{stroke:var(--panel);stroke-width:2.5}
+.rig .portdot text{font:700 12px/1 var(--f-body);fill:#fff;pointer-events:none}
+.rig .portdot.sel circle{stroke:var(--ink);stroke-width:3.5}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;font-size:14px}
+.readout div{background:var(--sunk);border-radius:10px;padding:8px 10px;min-width:0}
+.readout b{display:block;font:700 12px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.readout span{font-variant-numeric:tabular-nums}
+
+/* your turn */
+.job{border-left:5px solid var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 11px;font-size:14px;font-weight:600}
+.chip i{width:10px;height:10px;border-radius:50%;flex:none}
+.chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.vol{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.vol input[type=range]{flex:1 1 180px;accent-color:var(--accent);min-width:0}
+.vol input[type=number]{width:84px;font:600 16px var(--f-mono);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+.preview{font-size:15px;min-height:2.6em}
+.prog{list-style:none;margin:0;padding:0;display:grid;gap:6px;counter-reset:m}
+.prog li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;background:var(--sunk);border-radius:10px;padding:7px 8px 7px 10px;font-size:15px;counter-increment:m}
+.prog li::before{content:counter(m);font:700 13px var(--f-mono);color:var(--muted)}
+.prog li.now{background:var(--accent-soft)}
+.prog li.badmove{box-shadow:inset 3px 0 0 var(--bad)}
+.prog .x{border:0;background:transparent;font-size:18px;line-height:1;padding:2px 6px;color:var(--muted)}
+.prog .empty{display:block;background:transparent;border:1px dashed var(--line);color:var(--muted);text-align:center}
+.prog .empty::before{content:none}
+.checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.checks li{background:var(--sunk);border-radius:10px;padding:7px 10px;font-size:14px;font-weight:600;display:flex;gap:7px;align-items:center}
+.checks li.ok{color:var(--good)} .checks li.ok::before{content:"✓"}
+.checks li.no{color:var(--bad)} .checks li.no::before{content:"✗"}
+.verdict{font:800 22px/1.2 var(--f-body)}
+.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.why{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}
+.swatches{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.sw{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);display:inline-block;vertical-align:middle;margin-right:6px}
+
+/* the dictionary */
+.parts4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.parts4 div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px}
+.parts4 b{display:block;color:var(--accent)}
+.steps{display:flex;flex-wrap:wrap;gap:6px}
+.steps button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600}
+.steps button[aria-current="step"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.steps button .n{font-family:var(--f-mono);margin-right:6px;opacity:.7}
+.onto text{font-family:var(--f-body);fill:var(--ink)}
+.onto .node rect{fill:var(--panel);stroke:var(--ink);stroke-width:1.5}
+.onto .node .nm{font:700 23px var(--f-body)}
+.onto .node .cls{font:500 15px var(--f-mono);fill:var(--muted)}
+.onto .node.hl rect{stroke:var(--accent);stroke-width:3.5;fill:var(--accent-soft)}
+.onto .node.dimmed{opacity:.28}
+.onto .pt circle{stroke:var(--panel);stroke-width:2}
+.onto .pt text{font:700 16px var(--f-body);fill:#fff}
+.onto .edge{fill:none;stroke:var(--muted);stroke-width:1.6;opacity:.75}
+.onto .edge.reach{stroke:var(--accent);stroke-width:2.6;stroke-dasharray:7 6;opacity:.95}
+.onto .edge.hl{stroke:var(--accent);stroke-width:4;opacity:1}
+.onto .edge.dimmed{opacity:.12}
+.onto .layer{transition:opacity .45s}
+.onto .off{opacity:0;pointer-events:none}
+.onto .elab{font:700 20px var(--f-mono);fill:var(--accent)}
+.caption{font-size:16px}
+.rules{display:flex;flex-wrap:wrap;gap:6px}
+.rules button{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 11px;font-size:14px;font-weight:600}
+.rules button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.rulebox{display:grid;gap:8px}
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:14px 16px;font:400 13px/1.6 var(--f-mono);overflow-x:auto;white-space:pre;max-height:330px;overflow-y:auto}
+.code .k{color:var(--code-key)} .code .s{color:var(--code-str)} .code .c{color:var(--code-dim)}
+.code .new{background:var(--code-hi);display:inline-block;min-width:100%;border-radius:4px}
+.count{font-size:14px;color:var(--muted)}
+
+/* the chemistry */
+.mixer{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.flask{width:120px;height:180px;border-radius:14px 14px 22px 22px;border:2px solid var(--ink);position:relative;overflow:hidden;background:var(--panel)}
+.flask .liq{position:absolute;left:0;right:0;bottom:0;height:72%;transition:background-color .25s}
+.sliders{display:grid;gap:10px;min-width:0}
+.sl{display:grid;grid-template-columns:64px minmax(0,1fr) 52px;gap:10px;align-items:center;font-weight:600}
+.sl input{width:100%;min-width:0}
+.sl output{font:600 15px var(--f-mono);text-align:right}
+.abs text{font-family:var(--f-body);fill:var(--ink)}
+.abs .t{font-size:13px;fill:var(--muted)}
+.formula{font:500 14px/1.6 var(--f-mono);background:var(--sunk);border-radius:10px;padding:10px 12px;overflow-x:auto;white-space:nowrap}
+
+/* the results */
+.bars{display:grid;gap:14px}
+.group h4{margin:0 0 8px;font:700 13px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.group h4 span{color:var(--ink);letter-spacing:0;text-transform:none;font-size:14px;margin-left:6px}
+.bar{display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:15px;padding:3px 0}
+.bar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .nm small{color:var(--muted);font-size:12px;margin-left:4px}
+.track{position:relative;height:20px;background:var(--sunk);border-radius:5px;overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:0 5px 5px 0;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.fill.alt{background:var(--muted)}
+.fill.half{height:50%} .fill.lower{top:50%}
+.bar .v{font:600 14px var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.bar.nothink .fill{background:repeating-linear-gradient(135deg,var(--accent) 0 6px,var(--accent-soft) 6px 9px)}
+.bar.nothink .fill.alt{background:repeating-linear-gradient(135deg,var(--muted) 0 6px,var(--sunk) 6px 9px)}
+.axis{display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr) 54px;gap:10px;font-size:12px;color:var(--muted)}
+.axis div:nth-child(2){display:flex;justify-content:space-between}
+#rewBars .bar,#rewBars .axis{grid-template-columns:minmax(0,250px) minmax(0,1fr) 96px}
+.keyrow{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.keyrow i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:6px;vertical-align:0}
+.summary{font:700 20px/1.35 var(--f-body);min-height:2.7em}
+.summary b{color:var(--accent)}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;padding:6px 9px;border-radius:8px;max-width:260px;opacity:0;transition:opacity .12s}
+
+footer{border-top:1px solid var(--line);padding-block:30px 46px;display:grid;gap:10px;font-size:14px;color:var(--muted)}
+footer p{max-width:90ch}
+
+@media (max-width:900px){
+  .herogrid{grid-template-columns:minmax(0,1fr)}
+  .step{grid-template-columns:minmax(0,1fr)}
+  .step.split{grid-template-areas:"p1" "w" "p2";grid-template-rows:auto}
+  .sticky{position:static}
+  .stats{grid-template-columns:minmax(0,1fr)}
+  .checks{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .readout{grid-template-columns:minmax(0,1fr)}
+  .parts4{grid-template-columns:minmax(0,1fr)}
+  .bar,.axis,#rewBars .bar,#rewBars .axis{grid-template-columns:minmax(0,120px) minmax(0,1fr) 48px}
+  .mixer{grid-template-columns:minmax(0,1fr)}
+  .flask{margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap hero">
+    <p class="eyebrow">ColourMix v3 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>
+    <h1>Can an LLM run a lab robot? <em>Give it a dictionary.</em></h1>
+    <div class="herogrid">
+      <p class="lede" id="lede"></p>
+      <a class="author" href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">
+        <span class="avatar"><span class="initials" aria-hidden="true">JF</span><img id="photo" alt="Jingyu Feng" hidden></span>
+        <span class="who"><b>Dr Jingyu Feng</b><span>Facility Manager, DIGIBAT</span><span>Department of Chemical Engineering, Imperial College London</span><u>Profile ↗</u></span>
+      </a>
+    </div>
+  </div>
+  <div class="secbar"><nav class="wrap" aria-label="Sections"><a href="#robot">1 The robot</a><a href="#turn">2 Your turn</a><a href="#dictionary">3 The dictionary</a><a href="#chemistry">4 The chemistry</a><a href="#results">5 The result</a><a href="#setups">6 Two set-ups</a></nav></div>
+</header>
+<main>
+<div class="wrap stats" id="stats"></div>
+
+<section class="step split wrap" id="robot" aria-labelledby="h-robot">
+  <div class="text p1">
+    <p class="eyebrow"><span class="num">1</span>The robot</p>
+    <h2 id="h-robot">Two pumps between the bottles and the vial</h2>
+    <p>Each pump has a syringe that holds 5 mL and a valve with six ports. Each port has a tube to one thing: a dye bottle, clean water, the air line, the vial, or the waste bottle.</p>
+    <p>The robot does one kind of move: <b>turn a pump's valve to a port, then move its plunger</b>. Pull the plunger up and liquid comes in through that port. Push it down and the liquid goes out the same way.</p>
+    <p class="caption" id="portCaption">Tap a port on the drawing to follow its tube.</p>
+    <div class="row"><span class="label">Set-up</span>
+      <div class="seg" role="group" aria-label="Set-up"><button type="button" data-plumb="asPlumbed">Configuration 1</button><button type="button" data-plumb="rewired">Configuration 2</button></div></div>
+    <p class="note">Configuration 2 moves every tube to a different port. We tested the LLMs on both.</p>
+  </div>
+  <div class="text p2" id="turn">
+    <p class="eyebrow" style="margin-top:10px"><span class="num">2</span>Your turn</p>
+    <h2>Write the program the LLMs were asked for</h2>
+    <div class="card job" id="job"></div>
+    <div class="card" style="display:grid;gap:12px">
+      <div class="row"><span class="label">Pump</span><div class="seg" role="group" aria-label="Pump" id="pumpSeg"><button type="button" data-pump="1">Pump 1</button><button type="button" data-pump="2">Pump 2</button></div></div>
+      <div class="row" style="align-items:flex-start"><span class="label" style="padding-top:8px">Port</span><div class="chips" id="portChips" role="group" aria-label="Port"></div></div>
+      <div class="vol"><label class="label" for="toRange">Plunger to</label>
+        <input type="range" id="toRange" min="0" max="5" step="0.01" value="5" aria-label="Plunger position in mL">
+        <input type="number" id="toNum" min="0" max="5" step="0.01" value="5" aria-label="Plunger position in mL"> <span>mL</span></div>
+      <p class="preview" id="preview"></p>
+      <div class="row"><button type="button" class="btn primary" id="addMove">Add this move</button><button type="button" class="btn" id="undoMove">Undo</button></div>
+    </div>
+    <ol class="prog" id="prog" aria-label="Your program"></ol>
+    <div class="row"><button type="button" class="btn primary" id="runBtn">Run</button><button type="button" class="btn" id="clearBtn">Start again</button></div>
+    <div class="row" style="gap:6px"><span class="note" style="width:100%">Or load a real answer from our test:</span>
+      <button type="button" class="btn" id="exAlone"></button><button type="button" class="btn" id="exOnto"></button></div>
+    <div class="card" id="result" hidden></div>
+  </div>
+  <div class="work sticky">
+    <div class="card" style="padding:10px 10px 6px"><svg class="rig" id="rig" viewBox="0 0 640 590" role="img" aria-label="The two pumps, their valve ports and tubes"></svg></div>
+    <div class="legend" id="legend"></div>
+    <div class="readout" id="readout"></div>
+  </div>
+</section>
+
+<section class="step wrap" id="dictionary" aria-labelledby="h-dict">
+  <div class="text">
+    <p class="eyebrow"><span class="num">3</span>The dictionary</p>
+    <h2 id="h-dict">What the LLMs didn't know, written down</h2>
+    <p>An LLM has read a lot about chemistry, but it has never seen our robot. It doesn't know that only one pump is connected to the air line, that a syringe holds only 5 mL, or that the vial must be stirred with bubbles.</p>
+    <p>So we wrote a <b>dictionary of the robot</b> for it. Computer scientists call this an <i>ontology</i>. Like any dictionary, it is built from four kinds of entry:</p>
+    <div class="parts4">
+      <div><b>Categories</b>the kinds of thing: pump, port, bottle</div>
+      <div><b>Definitions</b>what each part is: pump 1's syringe holds 5 mL</div>
+      <div><b>Relationships</b>how parts connect: port 4 goes to the air line</div>
+      <div><b>Good practice</b>what a good job means: stir with air at the end</div>
+    </div>
+    <p>We wrote it in OWL, a standard format that people and computers can both read. Step through how it is built.</p>
+    <div class="steps" id="steps" role="group" aria-label="Steps"></div>
+    <p class="caption" id="stepCaption"></p>
+    <div class="row"><button type="button" class="btn" id="stepBack">Back</button><button type="button" class="btn primary" id="stepNext">Next</button>
+      <div class="seg" role="group" aria-label="Set-up"><button type="button" data-plumb="asPlumbed">Configuration 1</button><button type="button" data-plumb="rewired">Configuration 2</button></div></div>
+    <div class="rulebox" id="rulebox" hidden>
+      <div class="rules" id="rules" role="group" aria-label="Good practice"></div>
+      <p id="ruleText"></p>
+    </div>
+  </div>
+  <div class="work sticky">
+    <div class="card" style="padding:8px"><svg class="onto" id="onto" viewBox="0 0 1000 620" role="img" aria-label="The dictionary as a map of parts and connections"></svg></div>
+    <div class="code" id="ttl" aria-label="The dictionary as written in OWL" tabindex="0"></div>
+    <p class="count" id="count"></p>
+  </div>
+</section>
+
+<section class="step wrap" id="chemistry" aria-labelledby="h-chem">
+  <div class="text">
+    <p class="eyebrow"><span class="num">4</span>The chemistry</p>
+    <h2 id="h-chem">The same dictionary explains how colours mix</h2>
+    <p>Each dye lets some colours of light through and blocks others. Red dye blocks green and blue light. In a mix, the light blocked by each dye adds up, in proportion to how much of that dye there is.</p>
+    <p id="lawText"></p>
+    <div class="code" id="dyeTtl"></div>
+  </div>
+  <div class="work">
+    <div class="card mixer">
+      <div class="flask" aria-hidden="true"><div class="liq" id="liq"></div></div>
+      <div class="sliders">
+        <div class="sl"><label for="mr">Red</label><input type="range" id="mr" min="0" max="10" step="1" style="accent-color:var(--red)"><output id="or"></output></div>
+        <div class="sl"><label for="my">Yellow</label><input type="range" id="my" min="0" max="10" step="1" style="accent-color:var(--yellow)"><output id="oy"></output></div>
+        <div class="sl"><label for="mb">Blue</label><input type="range" id="mb" min="0" max="10" step="1" style="accent-color:var(--blue)"><output id="ob"></output></div>
+        <div class="row"><button type="button" class="btn" id="mixJob">The job's purple</button><button type="button" class="btn" id="mixRandom">Surprise me</button></div>
+      </div>
+    </div>
+    <div class="card"><p class="eyebrow" style="margin-bottom:6px">Light blocked, by colour of light</p><svg class="abs" id="absChart" viewBox="0 0 560 220" role="img" aria-label="How much red, green and blue light the mix blocks"></svg>
+      <div class="keyrow"><span><i style="background:var(--red)"></i>red dye</span><span><i style="background:var(--yellow)"></i>yellow dye</span><span><i style="background:var(--blue)"></i>blue dye</span></div></div>
+    <div class="formula" id="formula"></div>
+  </div>
+</section>
+
+<section class="step wrap" id="results" aria-labelledby="h-res">
+  <div class="text">
+    <p class="eyebrow"><span class="num">5</span>The result</p>
+    <h2 id="h-res">How much the dictionary helped</h2>
+    <p id="method"></p>
+    <div class="seg" role="group" aria-label="Help given" id="setupSeg"><button type="button" data-setup="0">On its own</button><button type="button" data-setup="1">+ Dictionary</button><button type="button" data-setup="2">+ Twin</button><button type="button" data-setup="3">+ Both</button></div>
+    <p class="summary" id="summary" aria-live="polite"></p>
+    <p class="note" id="copyNote"></p>
+  </div>
+  <div class="work">
+    <div class="card bars" id="bars"></div>
+  </div>
+</section>
+
+<section class="step wrap" id="setups" aria-labelledby="h-rew">
+  <div class="text">
+    <p class="eyebrow"><span class="num">6</span>Two set-ups</p>
+    <h2 id="h-rew">Does the dictionary only work for one set-up?</h2>
+    <p id="rewText"></p>
+    <div class="seg" role="group" aria-label="Set-up"><button type="button" data-plumb="asPlumbed">Configuration 1</button><button type="button" data-plumb="rewired">Configuration 2</button></div>
+    <p class="summary" id="rewSummary" aria-live="polite"></p>
+  </div>
+  <div class="work">
+    <div class="card bars" id="rewBars"></div>
+  </div>
+</section>
+
+<section class="step wrap" aria-labelledby="h-why">
+  <div class="text">
+    <p class="eyebrow">Why it matters</p>
+    <h2 id="h-why">Write the lab's knowledge down once, and an LLM can use it</h2>
+  </div>
+  <div class="text">
+    <p>Labs run on knowledge that lives in people's heads: which tube goes where, what you must never do, how much a syringe holds. Written down as a dictionary a computer can read, that knowledge can be used by people and LLMs alike, checked automatically, and updated in one place when the lab changes.</p>
+    <p>ColourMix is a small, safe version of a big question for automated labs: can an LLM be trusted to drive real equipment? On their own, even the strongest LLMs made mistakes a technician never would. With the robot's dictionary, the ones that think before answering stopped making them.</p>
+  </div>
+</section>
+</main>
+<footer class="wrap" id="foot"></footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const D = {"date": "22 Nov 2026", "models": [{"name": "Opus 5.5", "thinking": true, "local": false, "success": [83.3, 100.0, 95.8, 100.0], "n": [24, 24, 24, 24], "score": [97.1, 98.1, 98.1, 98.8], "asPlumbed": [[80.0, 20], [100.0, 20]], "rewired": [[100.0, 12], [100.0, 12]]}, {"name": "Fable 5.2", "thinking": true, "local": false, "success": [54.2, 100.0, 100.0, 100.0], "n": [24, 24, 24, 24], "score": [97.2, 98.3, 98.6, 98.2], "asPlumbed": [[50.0, 20], [100.0, 20]], "rewired": [[58.3, 12], [100.0, 12]]}, {"name": "GPT-6.2 Sol", "thinking": true, "local": false, "success": [25.0, 100.0, 100.0, 100.0], "n": [24, 24, 24, 24], "score": [97.2, 98.6, 98.6, 98.4], "asPlumbed": [[25.0, 20], [100.0, 20]], "rewired": [[27.3, 11], [100.0, 12]]}, {"name": "GPT-6.2 Astra", "thinking": true, "local": false, "success": [25.0, 100.0, 100.0, 100.0], "n": [24, 24, 24, 24], "score": [97.5, 98.7, 99.0, 98.6], "asPlumbed": [[25.0, 20], [100.0, 20]], "rewired": [[27.3, 11], [100.0, 10]]}, {"name": "Grok 4.7", "thinking": true, "local": false, "success": [26.1, 100.0, 95.8, 100.0], "n": [23, 21, 24, 24], "score": [96.0, 98.7, 97.8, 99.0], "asPlumbed": [[26.3, 19], [100.0, 17]], "rewired": [[25.0, 12], [100.0, 12]]}, {"name": "Kimi K3.1 Pro", "thinking": true, "local": false, "success": [26.1, 100.0, 87.5, 100.0], "n": [23, 24, 24, 24], "score": [97.3, 98.7, 98.2, 98.6], "asPlumbed": [[26.3, 19], [100.0, 20]], "rewired": [[25.0, 12], [100.0, 12]]}, {"name": "Mistral Large 4", "thinking": true, "local": false, "success": [17.4, 100.0, 100.0, 100.0], "n": [23, 24, 24, 24], "score": [93.6, 98.4, 95.5, 98.2], "asPlumbed": [[20.0, 20], [100.0, 20]], "rewired": [[25.0, 12], [100.0, 12]]}, {"name": "Qwen 3.8 27B (thinking)", "thinking": true, "local": true, "success": [4.2, 100.0, 91.7, 100.0], "n": [24, 24, 24, 24], "score": [95.0, 97.7, 96.4, 97.6], "asPlumbed": [[5.0, 20], [100.0, 20]], "rewired": [[16.7, 12], [100.0, 12]]}, {"name": "Qwen 3.8 27B (no thinking)", "thinking": false, "local": true, "success": [0.0, 30.0, 0.0, 85.0], "n": [20, 20, 20, 20], "score": [88.2, 89.2, 91.7, 91.5], "asPlumbed": [[0.0, 20], [30.0, 20]], "rewired": [[0.0, 8], [37.5, 8]]}, {"name": "DeepSeek V4 Flash (no thinking)", "thinking": false, "local": true, "success": [0.0, 79.2, 20.5, 93.2], "n": [23, 24, 44, 44], "score": [89.5, 89.8, 91.7, 90.5], "asPlumbed": [[0.0, 19], [75.0, 20]], "rewired": [[0.0, 12], [91.7, 12]]}, {"name": "DeepSeek V4 Flash (thinking)", "thinking": true, "local": true, "success": [26.1, 100.0, 95.7, 100.0], "n": [23, 24, 23, 24], "score": [97.0, 98.7, 98.8, 98.8], "asPlumbed": [[26.3, 19], [100.0, 20]], "rewired": [[27.3, 11], [100.0, 12]]}], "numbers": {"models": 11, "thinking": 9, "allSuccess": [26.1, 91.7, 80.6, 98.0], "allScore": [95.1, 96.8, 96.8, 97.1], "thinkSuccess": [31.9, 100.0, 96.3, 100.0], "thinkPerfect": [0, 9, 4, 9], "rewiredRight": 106, "rewiredOf": 106, "rewiredAlone": 36.9, "free": {"name": "Qwen 3.8 27B (thinking)", "alone": 4.2, "onto": 100.0}}, "plumbings": {"asPlumbed": {"1": {"1": "water", "2": "red", "3": "blue", "4": "air", "5": "vial 1", "6": "waste"}, "2": {"1": "water", "2": "yellow", "3": "not connected", "4": "not connected", "5": "vial 1", "6": "waste"}}, "rewired": {"1": {"1": "yellow", "2": "blue", "3": "water", "4": "vial 1", "5": "waste", "6": "not connected"}, "2": {"1": "vial 1", "2": "red", "3": "air", "4": "not connected", "5": "water", "6": "waste"}}}, "facts": {"asPlumbed": "\n# Tonight's plumbing: what each valve port is connected to\ncm:Nothing a cm:Unconnected .\ncm:Valve1 cm:hasPort cm:Pump1Port1 , cm:Pump1Port2 , cm:Pump1Port3 , cm:Pump1Port4 , cm:Pump1Port5 , cm:Pump1Port6 .\ncm:Pump1Port1 a cm:ValvePort ; cm:portNumber 1 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:WaterBottle .\ncm:Pump1Port2 a cm:ValvePort ; cm:portNumber 2 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:RedBottle .\ncm:Pump1Port3 a cm:ValvePort ; cm:portNumber 3 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:BlueBottle .\ncm:Pump1Port4 a cm:ValvePort ; cm:portNumber 4 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:Air .\ncm:Pump1Port5 a cm:ValvePort ; cm:portNumber 5 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:RobotVial1 .\ncm:Pump1Port6 a cm:ValvePort ; cm:portNumber 6 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:Waste .\ncm:Valve2 cm:hasPort cm:Pump2Port1 , cm:Pump2Port2 , cm:Pump2Port3 , cm:Pump2Port4 , cm:Pump2Port5 , cm:Pump2Port6 .\ncm:Pump2Port1 a cm:ValvePort ; cm:portNumber 1 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:WaterBottle .\ncm:Pump2Port2 a cm:ValvePort ; cm:portNumber 2 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:YellowBottle .\ncm:Pump2Port3 a cm:ValvePort ; cm:portNumber 3 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Nothing .\ncm:Pump2Port4 a cm:ValvePort ; cm:portNumber 4 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Nothing .\ncm:Pump2Port5 a cm:ValvePort ; cm:portNumber 5 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:RobotVial1 .\ncm:Pump2Port6 a cm:ValvePort ; cm:portNumber 6 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Waste .\n\n# The same, the other way round: what each pump reaches, and the way in to each thing\ncm:Pump1 cm:reaches cm:WaterBottle , cm:RedBottle , cm:BlueBottle , cm:Air , cm:RobotVial1 , cm:Waste ;\n    rdfs:comment \"Pump 1: port 1 water, port 2 red, port 3 blue, port 4 air, port 5 vial 1, port 6 waste.\" .\ncm:Pump2 cm:reaches cm:WaterBottle , cm:YellowBottle , cm:RobotVial1 , cm:Waste ;\n    rdfs:comment \"Pump 2: port 1 water, port 2 yellow, port 5 vial 1, port 6 waste; ports 3 and 4 have nothing connected.\" .\ncm:WaterBottle cm:reachedThrough cm:Pump1Port1 , cm:Pump2Port1 .\ncm:RedBottle cm:reachedThrough cm:Pump1Port2 .\ncm:BlueBottle cm:reachedThrough cm:Pump1Port3 .\ncm:Air cm:reachedThrough cm:Pump1Port4 .\ncm:RobotVial1 cm:reachedThrough cm:Pump1Port5 , cm:Pump2Port5 .\ncm:Waste cm:reachedThrough cm:Pump1Port6 , cm:Pump2Port6 .\ncm:YellowBottle cm:reachedThrough cm:Pump2Port2 .\n", "rewired": "\n# Tonight's plumbing: what each valve port is connected to\ncm:Nothing a cm:Unconnected .\ncm:Valve1 cm:hasPort cm:Pump1Port1 , cm:Pump1Port2 , cm:Pump1Port3 , cm:Pump1Port4 , cm:Pump1Port5 , cm:Pump1Port6 .\ncm:Pump1Port1 a cm:ValvePort ; cm:portNumber 1 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:YellowBottle .\ncm:Pump1Port2 a cm:ValvePort ; cm:portNumber 2 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:BlueBottle .\ncm:Pump1Port3 a cm:ValvePort ; cm:portNumber 3 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:WaterBottle .\ncm:Pump1Port4 a cm:ValvePort ; cm:portNumber 4 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:RobotVial1 .\ncm:Pump1Port5 a cm:ValvePort ; cm:portNumber 5 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:Waste .\ncm:Pump1Port6 a cm:ValvePort ; cm:portNumber 6 ; cm:onPump cm:Pump1 ; cm:connectedTo cm:Nothing .\ncm:Valve2 cm:hasPort cm:Pump2Port1 , cm:Pump2Port2 , cm:Pump2Port3 , cm:Pump2Port4 , cm:Pump2Port5 , cm:Pump2Port6 .\ncm:Pump2Port1 a cm:ValvePort ; cm:portNumber 1 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:RobotVial1 .\ncm:Pump2Port2 a cm:ValvePort ; cm:portNumber 2 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:RedBottle .\ncm:Pump2Port3 a cm:ValvePort ; cm:portNumber 3 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Air .\ncm:Pump2Port4 a cm:ValvePort ; cm:portNumber 4 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Nothing .\ncm:Pump2Port5 a cm:ValvePort ; cm:portNumber 5 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:WaterBottle .\ncm:Pump2Port6 a cm:ValvePort ; cm:portNumber 6 ; cm:onPump cm:Pump2 ; cm:connectedTo cm:Waste .\n\n# The same, the other way round: what each pump reaches, and the way in to each thing\ncm:Pump1 cm:reaches cm:YellowBottle , cm:BlueBottle , cm:WaterBottle , cm:RobotVial1 , cm:Waste ;\n    rdfs:comment \"Pump 1: port 1 yellow, port 2 blue, port 3 water, port 4 vial 1, port 5 waste; port 6 has nothing connected.\" .\ncm:Pump2 cm:reaches cm:RobotVial1 , cm:RedBottle , cm:Air , cm:WaterBottle , cm:Waste ;\n    rdfs:comment \"Pump 2: port 1 vial 1, port 2 red, port 3 air, port 5 water, port 6 waste; port 4 has nothing connected.\" .\ncm:YellowBottle cm:reachedThrough cm:Pump1Port1 .\ncm:BlueBottle cm:reachedThrough cm:Pump1Port2 .\ncm:WaterBottle cm:reachedThrough cm:Pump1Port3 , cm:Pump2Port5 .\ncm:RobotVial1 cm:reachedThrough cm:Pump1Port4 , cm:Pump2Port1 .\ncm:Waste cm:reachedThrough cm:Pump1Port5 , cm:Pump2Port6 .\ncm:RedBottle cm:reachedThrough cm:Pump2Port2 .\ncm:Air cm:reachedThrough cm:Pump2Port3 .\n"}, "job": {"id": "mix2", "shares": {"red": 0.7, "yellow": 0.0, "blue": 0.3}, "ml": 9.8, "stroke": 5.0, "vialMax": 14.0, "residue": 0.3}, "examples": {"asPlumbed": {"alone": {"model": "Mistral Large 4", "actions": [{"pump": 1, "port": 2, "to_ml": 5.0}, {"pump": 1, "port": 5, "to_ml": 0.0}, {"pump": 1, "port": 2, "to_ml": 1.86}, {"pump": 1, "port": 5, "to_ml": 0.0}, {"pump": 1, "port": 3, "to_ml": 2.94}, {"pump": 1, "port": 5, "to_ml": 0.0}]}, "onto": {"model": "Mistral Large 4", "actions": [{"pump": 1, "port": 2, "to_ml": 5.0}, {"pump": 1, "port": 5, "to_ml": 0.0}, {"pump": 1, "port": 2, "to_ml": 1.86}, {"pump": 1, "port": 5, "to_ml": 0.0}, {"pump": 1, "port": 3, "to_ml": 2.94}, {"pump": 1, "port": 5, "to_ml": 0.0}, {"pump": 1, "port": 4, "to_ml": 5.0}, {"pump": 1, "port": 5, "to_ml": 0.0}]}}, "rewired": {"alone": {"model": "Mistral Large 4", "actions": [{"pump": 2, "port": 2, "to_ml": 5.0}, {"pump": 2, "port": 1, "to_ml": 0.0}, {"pump": 2, "port": 2, "to_ml": 1.86}, {"pump": 2, "port": 1, "to_ml": 0.0}, {"pump": 1, "port": 2, "to_ml": 2.94}, {"pump": 1, "port": 4, "to_ml": 0.0}]}, "onto": {"model": "Mistral Large 4", "actions": [{"pump": 2, "port": 2, "to_ml": 5.0}, {"pump": 2, "port": 1, "to_ml": 0.0}, {"pump": 2, "port": 2, "to_ml": 1.86}, {"pump": 2, "port": 1, "to_ml": 0.0}, {"pump": 1, "port": 2, "to_ml": 2.94}, {"pump": 1, "port": 4, "to_ml": 0.0}, {"pump": 2, "port": 3, "to_ml": 5.0}, {"pump": 2, "port": 1, "to_ml": 0.0}]}}}, "law": {"E": [[0.1251, 1.3868, 1.3645], [0.0654, 0.1639, 0.8924], [0.6847, 0.1268, 0.0358]], "n": 15, "blank": [135.1, 137.2, 150.0]}, "ttl": {"classes": {"cm:SyringePump": "cm:SyringePump a owl:Class .", "cm:ValvePort": "cm:ValvePort a owl:Class .", "cm:Bottle": "cm:Bottle a owl:Class .", "cm:AirLine": "cm:AirLine a owl:Class .", "cm:WasteBottle": "cm:WasteBottle a owl:Class .", "cm:Unconnected": "cm:Unconnected a owl:Class .", "cm:ColourVial": "cm:ColourVial a owl:Class ."}, "parts": ["cm:Pump1 a cm:SyringePump ; rdfs:label \"pump 1\" ; cm:hasSyringe cm:Syringe1 ; cm:hasValve cm:Valve1 .", "cm:Pump2 a cm:SyringePump ; rdfs:label \"pump 2\" ; cm:hasSyringe cm:Syringe2 ; cm:hasValve cm:Valve2 .", "cm:Syringe1 a cm:Syringe ; cm:capacityML 5.0 .", "cm:Syringe2 a cm:Syringe ; cm:capacityML 5.0 .", "cm:WaterBottle a cm:Bottle ; cm:holds cm:Water .", "cm:RedBottle a cm:Bottle ; cm:holds cm:RedDye .", "cm:YellowBottle a cm:Bottle ; cm:holds cm:YellowDye .", "cm:BlueBottle a cm:Bottle ; cm:holds cm:BlueDye .", "cm:Air a cm:AirLine .", "cm:Waste a cm:WasteBottle .", "cm:RobotVial1 a cm:ColourVial ; cm:capacityML 14.0 ; cm:fillML 9.8 ; cm:residueML 0.3 ."], "dyes": ["cm:RedDye a cm:Dye ; rdfs:label \"red\" ;\n    cm:blocksStrongly cm:GreenLight , cm:BlueLight ; cm:letsThrough cm:RedLight .", "cm:YellowDye a cm:Dye ; rdfs:label \"yellow\" ;\n    cm:blocksStrongly cm:BlueLight ; cm:blocksALittle cm:GreenLight ; cm:letsThrough cm:RedLight .", "cm:BlueDye a cm:Dye ; rdfs:label \"blue\" ;\n    cm:blocksStrongly cm:RedLight ; cm:blocksALittle cm:GreenLight ; cm:letsThrough cm:BlueLight ."], "rules": {"StirRule": {"text": "After the last dye, stir: the pump that reaches cm:Air draws 5 mL of air through that port and pushes it into the vial. The bubbles mix the colour; without them the camera reads streaks. Only one pump reaches the air line (see tonight's plumbing).", "ttl": "cm:StirRule a cm:Rule ; cm:statement\n    \"After the last dye, stir: the pump that reaches cm:Air draws 5 mL of air through that port and pushes it into the vial. The bubbles mix the colour; without them the camera reads streaks. Only one pump reaches the air line (see tonight's plumbing).\" ."}, "ReachRule": {"text": "Each pump reaches only what cm:reaches lists for it (see tonight's plumbing): a dye comes only from the pump that reaches its bottle, through that port; the air line only from the pump that reaches cm:Air.", "ttl": "cm:ReachRule a cm:Rule ; cm:statement\n    \"Each pump reaches only what cm:reaches lists for it (see tonight's plumbing): a dye comes only from the pump that reaches its bottle, through that port; the air line only from the pump that reaches cm:Air.\" ."}, "CapacityRule": {"text": "to_ml must be between 0 and 5. A dose bigger than 5 mL takes two or more strokes: draw, push into the vial, draw again, push again.", "ttl": "cm:CapacityRule a cm:Rule ; cm:statement\n    \"to_ml must be between 0 and 5. A dose bigger than 5 mL takes two or more strokes: draw, push into the vial, draw again, push again.\" ."}, "DoseRule": {"text": "A mix puts exactly share x 9.8 mL of each dye into the empty, clean vial (30 % red is 2.94 mL of red), and nothing else: no water. The doses add up to 9.8 mL. Doses are exact to about 0.01 mL.", "ttl": "cm:DoseRule a cm:Rule ; cm:statement\n    \"A mix puts exactly share x 9.8 mL of each dye into the empty, clean vial (30 % red is 2.94 mL of red), and nothing else: no water. The doses add up to 9.8 mL. Doses are exact to about 0.01 mL.\" ."}, "DrawRule": {"text": "Draw only from a bottle (water or a dye), the air line, or the vial (to empty it). Never draw from the waste bottle (it is dirty) or from a port with nothing connected (it sucks air).", "ttl": "cm:DrawRule a cm:Rule ; cm:statement\n    \"Draw only from a bottle (water or a dye), the air line, or the vial (to empty it). Never draw from the waste bottle (it is dirty) or from a port with nothing connected (it sucks air).\" ."}, "PushRule": {"text": "Push only into the vial or the waste bottle. Never push into a bottle: it spoils the stock (the one exception: liquid drawn from a bottle and not yet mixed with anything may go back into the same bottle). Never push liquid into the air line or out of a port with nothing connected.", "ttl": "cm:PushRule a cm:Rule ; cm:statement\n    \"Push only into the vial or the waste bottle. Never push into a bottle: it spoils the stock (the one exception: liquid drawn from a bottle and not yet mixed with anything may go back into the same bottle). Never push liquid into the air line or out of a port with nothing connected.\" ."}, "EmptySyringeRule": {"text": "Finish with every syringe pushed out completely (to_ml 0) into the vial or the waste: liquid left in a syringe carries into the next job.", "ttl": "cm:EmptySyringeRule a cm:Rule ; cm:statement\n    \"Finish with every syringe pushed out completely (to_ml 0) into the vial or the waste: liquid left in a syringe carries into the next job.\" ."}, "MoveRule": {"text": "A move {pump, port, to_ml} turns that pump's valve to the port, then moves the plunger until the syringe holds to_ml mL (0 = empty, 5 = full). If to_ml is higher than before, the syringe draws the difference in from that port; if lower, it pushes the difference out into that port. The syringe's contents mix: what is pushed out is whatever the syringe holds. Both syringes start empty.", "ttl": "cm:MoveRule a cm:Rule ; cm:statement\n    \"A move {pump, port, to_ml} turns that pump's valve to the port, then moves the plunger until the syringe holds to_ml mL (0 = empty, 5 = full). If to_ml is higher than before, the syringe draws the difference in from that port; if lower, it pushes the difference out into that port. The syringe's contents mix: what is pushed out is whatever the syringe holds. Both syringes start empty.\" ."}}, "mixingLaw": "Beer-Lambert mixing: a vial's absorbance in each channel is the share-weighted sum of each dye's absorbance at full share: A_c = f_red * E_red,c + f_yellow * E_yellow,c + f_blue * E_blue,c, with the shares f as fractions adding to 1 and E from cm:absorbanceAtFullShare. Real vials follow it to within a few percent."}, "counts": {"statements": 294, "rules": 15}};
+(() => {
+"use strict";
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs = {}, parent, text) => { const e = document.createElementNS(NS, tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(text != null) e.textContent = text; if(parent) parent.appendChild(e); return e; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pct = v => v == null ? "–" : `${Math.round(v)}%`;
+const fmt = (v, n = 2) => Number(v).toFixed(n);
+const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const N = D.numbers, JOB = D.job;
+const DYES = ["red", "yellow", "blue"], BOTTLES = ["water", ...DYES];
+const NAME = {water: "water", red: "red", yellow: "yellow", blue: "blue", air: "the air line", "vial 1": "the vial", waste: "the waste", "not connected": "nothing"};
+const SHORT = {water: "water", red: "red", yellow: "yellow", blue: "blue", air: "air", "vial 1": "vial", waste: "waste", "not connected": "nothing"};
+const CV = {water: "var(--water)", red: "var(--red)", yellow: "var(--yellow)", blue: "var(--blue)", air: "var(--air)", "vial 1": "var(--vial)", waste: "var(--waste)", "not connected": "var(--nothing)"};
+const CONF = {asPlumbed: "configuration 1", rewired: "configuration 2"};
+const S = {plumb: "asPlumbed", pump: 1, port: 2, to: 5, prog: [], running: false, step: 0, rule: "StirRule", setup: 1, mix: [7, 0, 3], lastRun: null};
+const target = Object.fromEntries(DYES.map(d => [d, +(JOB.shares[d] * JOB.ml).toFixed(4)]));
+const ports = () => D.plumbings[S.plumb];
+
+/* the author's photo: inside the page if it was made with one, else photo.jpg beside it, else the profile picture, else initials */
+(() => { const img = $("#photo"), srcs = ["data:image/jpeg;base64,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", "photo.jpg", "https://profiles.imperial.ac.uk/j.feng19/thumbnail"].filter(Boolean); let i = 0;
+  img.addEventListener("load", () => { img.hidden = false; });
+  img.addEventListener("error", () => { i++; if(i < srcs.length) img.src = srcs[i]; else img.hidden = true; });
+  img.src = srcs[0]; })();
+
+/* ------------------------------------------------------------ colour from the mixing law */
+function rgbOf(vial){
+  const tot = Object.entries(vial).filter(([k]) => k !== "air").reduce((a, [, v]) => a + v, 0);
+  if(tot <= 1e-9) return null;
+  const f = DYES.map(d => (vial[d] || 0) / tot);
+  return [0, 1, 2].map(c => { const A = Math.min(4, Math.max(0, f.reduce((a, x, i) => a + x * D.law.E[i][c], 0))); return Math.round(255 * Math.exp(-A)); });
+}
+const rgbCss = c => c ? `rgb(${c[0]},${c[1]},${c[2]})` : "transparent";
+
+/* ------------------------------------------------------------ the digital twin of the pumps, in the page */
+const STROKE = JOB.stroke, VIAL_MAX = JOB.vialMax, RESIDUE = JOB.residue;
+function total(d, liquidOnly){ let s = 0; for(const k in d) if(!(liquidOnly && k === "air")) s += d[k]; return s; }
+function take(d, ml){ const tot = total(d); if(tot <= 1e-9) return {}; const f = Math.min(1, ml / tot), out = {};
+  for(const k in d){ out[k] = d[k] * f; d[k] -= out[k]; if(d[k] < 1e-9) delete d[k]; } return out; }
+function add(d, part){ for(const k in part) if(part[k] > 1e-12) d[k] = (d[k] || 0) + part[k]; }
+function newTwin(map){ return {map, syr: {1: {}, 2: {}}, valve: {1: 1, 2: 1}, vial: {}, problems: [], bad: new Set(), lastDye: null, stirred: false}; }
+function problem(t, i, words){ t.problems.push(words); t.bad.add(i); }
+function move(t, i, a){
+  const pump = +a.pump, port = +a.port, to = +a.to_ml;
+  if(!t.map[pump]){ problem(t, i, `there is no pump ${pump}`); return; }
+  if(!t.map[pump][port]){ problem(t, i, `pump ${pump} has no port ${port}`); return; }
+  if(!(to >= 0 && to <= STROKE + 1e-9)){ problem(t, i, `pump ${pump}: ${to} mL does not fit in its 5 mL syringe`); return; }
+  const what = t.map[pump][port], now = total(t.syr[pump]), d = Math.round((to - now) * 1e6) / 1e6;
+  t.valve[pump] = port;
+  if(Math.abs(d) < 1e-6) return;
+  d > 0 ? draw(t, i, pump, what, d) : push(t, i, pump, what, -d);
+}
+function draw(t, i, pump, what, ml){
+  const s = t.syr[pump];
+  if(BOTTLES.includes(what)) add(s, {[what]: ml});
+  else if(what === "air") add(s, {air: ml});
+  else if(what.startsWith("vial")){ const liquid = Math.max(0, total(t.vial) - RESIDUE), got = Math.min(ml, liquid);
+    if(got > 0) add(s, take(t.vial, got)); if(ml - got > 1e-6) add(s, {air: ml - got}); }
+  else if(what === "waste"){ problem(t, i, `pump ${pump} draws from the waste bottle (it would carry waste into the vial)`); add(s, {waste: ml}); }
+  else { problem(t, i, `pump ${pump} draws from port ${t.valve[pump]}, which has nothing connected (it sucks in air)`); add(s, {air: ml}); }
+}
+function push(t, i, pump, what, ml){
+  const part = take(t.syr[pump], ml), liquid = {}; let lq = 0;
+  for(const k in part) if(k !== "air"){ liquid[k] = part[k]; lq += part[k]; }
+  if(what.startsWith("vial")){
+    add(t.vial, liquid);
+    if((part.air || 0) > 0.5 && total(t.vial) > RESIDUE + 0.05 && t.lastDye != null) t.stirred = true;
+    if(DYES.some(k => liquid[k] > 0)){ t.lastDye = i; t.stirred = false; }
+    if(total(t.vial) > VIAL_MAX + 1e-6) problem(t, i, `the vial overflows: ${fmt(total(t.vial), 1)} mL (it holds ${VIAL_MAX} mL)`);
+  } else if(what === "waste"){ /* fine */ }
+  else if(BOTTLES.includes(what)){ const other = Object.keys(liquid).filter(k => k !== what && liquid[k] > 0.005);
+    if(other.length) problem(t, i, `pump ${pump} pushes ${other.join(", ")} back into the ${what} bottle (it spoils it)`); }
+  else if(what === "air"){ if(lq > 0.005) problem(t, i, `pump ${pump} pushes ${fmt(lq)} mL of liquid into the air line`); }
+  else if(lq > 0.005) problem(t, i, `pump ${pump} pushes ${fmt(lq)} mL out of a port with nothing connected (it spills)`);
+}
+function mark(t){
+  const got = Object.fromEntries(DYES.map(d => [d, t.vial[d] || 0])), tot = total(t.vial, true);
+  const tol = d => Math.max(0.05, 0.02 * target[d]);
+  const left = [1, 2].filter(p => total(t.syr[p], true) > 0.02);
+  const checks = {"safe": !t.problems.length, "right amounts": DYES.every(d => Math.abs(got[d] - target[d]) <= tol(d)),
+    "9.8 mL in all": Math.abs(tot - JOB.ml) <= 0.15, "no water": (t.vial.water || 0) <= 0.02, "stirred": t.stirred, "syringes empty": !left.length};
+  return {checks, correct: Object.values(checks).every(Boolean), got, total: tot, left};
+}
+function runAll(prog, map){
+  const t = newTwin(map), snaps = [];
+  prog.forEach((a, k) => { move(t, k + 1, a); snaps.push({syr: {1: {...t.syr[1]}, 2: {...t.syr[2]}}, vial: {...t.vial}, valve: {...t.valve}}); });
+  return {t, snaps, marks: mark(t)};
+}
+window.__twin = {runAll, target};
+
+/* ------------------------------------------------------------ the top */
+const ts = N.thinkSuccess;
+$("#lede").textContent = `Large language models (LLMs), the AI behind chatbots, have read a lot about chemistry, but they have never seen our robot. We asked ${N.models} LLMs to write the programs for its two syringe pumps. On their own, most got them wrong. With a dictionary of the robot, written as an ontology, they got them right. Try the job yourself below.`;
+const stats = [[`${pct(ts[0])} <span>→ ${pct(ts[1])}</span>`, `pump programs fully correct, for the ${N.thinking} LLMs that think before they answer`]];
+if(N.rewiredOf) stats.push([`${N.rewiredRight} <span>of ${N.rewiredOf}</span>`, `programs still correct after we moved every tube (configuration 2)`]);
+if(N.free) stats.push([`${pct(N.free.alone)} <span>→ ${pct(N.free.onto)}</span>`, `${esc(N.free.name)}, a free LLM running on our own computer`]);
+$("#stats").innerHTML = stats.map(([b, p]) => `<div class="stat"><div class="big">${b}</div><p>${p}</p></div>`).join("");
+
+/* ------------------------------------------------------------ the robot */
+const rig = $("#rig");
+const TOP = ["water", "red", "yellow", "blue", "air"], TX = [64, 186, 320, 454, 576], TY = 34;
+const PUMP = {1: [186, 262], 2: [454, 262]}, VR = 40;
+const VIAL = [320, 462], WASTE = [578, 470];
+const portXY = (p, k, r = VR) => { const a = (-90 + 60 * (k - 1)) * Math.PI / 180; return [PUMP[p][0] + r * Math.cos(a), PUMP[p][1] + r * Math.sin(a)]; };
+function anchor(what){
+  if(what === "vial 1") return [VIAL[0], VIAL[1] - 52];
+  if(what === "waste") return [WASTE[0], WASTE[1] - 40];
+  const i = TOP.indexOf(what); return i >= 0 ? [TX[i], TY + 72] : null;
+}
+let RIG = {};
+function drawRig(){
+  rig.innerHTML = "";
+  const gT = el("g", {}, rig), gB = el("g", {}, rig), gP = el("g", {}, rig);
+  TOP.forEach((w, i) => {
+    const x = TX[i];
+    if(w === "air"){ el("path", {d: `M${x - 16} ${TY + 34} q16 -30 32 0`, fill: "none", stroke: "var(--air)", "stroke-width": 5, "stroke-linecap": "round"}, gB);
+      el("circle", {cx: x, cy: TY + 52, r: 10, fill: "none", stroke: "var(--air)", "stroke-width": 4}, gB);
+      el("text", {x, y: TY + 2, "text-anchor": "middle", class: "lab"}, gB, "air"); return; }
+    el("rect", {x: x - 26, y: TY + 12, width: 52, height: 58, rx: 10, fill: "var(--panel)", stroke: "var(--ink)", "stroke-width": 1.5}, gB);
+    el("rect", {x: x - 22, y: TY + 28, width: 44, height: 38, rx: 7, fill: CV[w]}, gB);
+    el("rect", {x: x - 9, y: TY + 4, width: 18, height: 10, rx: 3, fill: "var(--ink)"}, gB);
+    el("text", {x, y: TY - 2, "text-anchor": "middle", class: "lab"}, gB, w);
+  });
+  el("rect", {x: VIAL[0] - 62, y: VIAL[1] - 64, width: 124, height: 152, rx: 14, fill: "var(--sunk)", stroke: "var(--line)", "stroke-width": 1.5}, gB);
+  el("text", {x: VIAL[0], y: VIAL[1] + 104, "text-anchor": "middle", class: "small"}, gB, "light box with camera");
+  el("rect", {x: VIAL[0] - 30, y: VIAL[1] - 50, width: 60, height: 128, rx: 10, fill: "var(--panel)", stroke: "var(--ink)", "stroke-width": 2}, gB);
+  RIG.vialFill = el("rect", {x: VIAL[0] - 27, y: VIAL[1] + 75, width: 54, height: 0, rx: 7, fill: "transparent"}, gB);
+  const fillY = VIAL[1] + 75 - 125 * JOB.ml / JOB.vialMax;
+  el("line", {x1: VIAL[0] - 36, x2: VIAL[0] + 36, y1: fillY, y2: fillY, stroke: "var(--muted)", "stroke-dasharray": "4 4"}, gB);
+  el("text", {x: VIAL[0] + 40, y: fillY + 4, class: "small"}, gB, "9.8 mL");
+  RIG.bubbles = el("g", {opacity: 0}, gB);
+  for(let k = 0; k < 7; k++) el("circle", {cx: VIAL[0] - 18 + (k * 37) % 36, cy: VIAL[1] + 60 - (k * 17) % 80, r: 3 + (k % 3), fill: "none", stroke: "var(--panel)", "stroke-width": 2}, RIG.bubbles);
+  el("text", {x: VIAL[0], y: VIAL[1] - 74, "text-anchor": "middle", class: "lab"}, gB, "the vial");
+  el("rect", {x: WASTE[0] - 30, y: WASTE[1] - 40, width: 60, height: 78, rx: 10, fill: "var(--panel)", stroke: "var(--ink)", "stroke-width": 1.5}, gB);
+  el("rect", {x: WASTE[0] - 26, y: WASTE[1] + 2, width: 52, height: 32, rx: 7, fill: "var(--waste)"}, gB);
+  el("text", {x: WASTE[0], y: WASTE[1] + 58, "text-anchor": "middle", class: "lab"}, gB, "waste");
+  RIG.tubes = {};
+  const map = ports();
+  for(const p of [1, 2]) for(let k = 1; k <= 6; k++){
+    const what = map[p][k], [px, py] = portXY(p, k), a = anchor(what);
+    if(!a){ const [qx, qy] = portXY(p, k, VR + 18); el("line", {x1: px, y1: py, x2: qx, y2: qy, stroke: "var(--nothing)", "stroke-width": 4, "stroke-linecap": "round"}, gT);
+      el("circle", {cx: qx, cy: qy, r: 4, fill: "var(--nothing)"}, gT); continue; }
+    const [nx, ny] = [(px - PUMP[p][0]) / VR, (py - PUMP[p][1]) / VR];
+    const c1 = [px + nx * 70, py + ny * 70], c2 = [a[0], a[1] + (a[1] < py ? 70 : -70)];
+    RIG.tubes[`${p}-${k}`] = el("path", {d: `M${px} ${py} C${c1[0]} ${c1[1]} ${c2[0]} ${c2[1]} ${a[0]} ${a[1]}`, class: "tube", stroke: CV[what]}, gT);
+  }
+  RIG.syr = {}; RIG.ptr = {}; RIG.dots = {}; RIG.vol = {};
+  for(const p of [1, 2]){
+    const [cx, cy] = PUMP[p];
+    el("rect", {x: cx - 26, y: cy + 46, width: 52, height: 132, rx: 8, fill: "var(--panel)", stroke: "var(--ink)", "stroke-width": 2}, gP);
+    RIG.syr[p] = el("g", {}, gP);
+    el("text", {x: cx, y: cy + 198, "text-anchor": "middle", class: "lab"}, gP, `pump ${p}`);
+    RIG.vol[p] = el("text", {x: cx, y: cy + 214, "text-anchor": "middle", class: "small"}, gP, "holds 0.00 of 5 mL");
+    el("circle", {cx, cy, r: VR, fill: "var(--sunk)", stroke: "var(--ink)", "stroke-width": 2}, gP);
+    RIG.ptr[p] = el("line", {x1: cx, y1: cy, x2: cx, y2: cy - VR + 8, stroke: "var(--ink)", "stroke-width": 5, "stroke-linecap": "round"}, gP);
+    el("circle", {cx, cy, r: 7, fill: "var(--ink)"}, gP);
+    for(let k = 1; k <= 6; k++){
+      const [x, y] = portXY(p, k), what = map[p][k];
+      const g = el("g", {class: "portdot", tabindex: 0, role: "button", "aria-label": `Pump ${p}, port ${k}: ${NAME[what]}`}, gP);
+      el("circle", {cx: x, cy: y, r: 12, fill: CV[what]}, g);
+      el("text", {x, y: y + 4, "text-anchor": "middle"}, g, k);
+      g.addEventListener("click", () => pickPort(p, k, true));
+      g.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); pickPort(p, k, true); } });
+      g.addEventListener("mouseenter", () => hotTube(`${p}-${k}`));
+      g.addEventListener("mouseleave", () => hotTube(null));
+      RIG.dots[`${p}-${k}`] = g;
+    }
+  }
+  $("#legend").innerHTML = ["water", "red", "yellow", "blue", "air", "vial 1", "waste", "not connected"]
+    .map(w => `<span><i style="background:${CV[w]}"></i>${SHORT[w]}</span>`).join("");
+  showState(null);
+  markSelected();
+}
+function hotTube(key){ for(const k in RIG.tubes) RIG.tubes[k].classList.toggle("hot", k === key); }
+function setPointer(p, k){ const [x, y] = portXY(p, k, VR - 8); RIG.ptr[p].setAttribute("x2", x); RIG.ptr[p].setAttribute("y2", y); }
+function syringeDraw(p, s){
+  const g = RIG.syr[p]; g.innerHTML = ""; const [cx, cy] = PUMP[p]; let y = cy + 50;
+  const order = ["air", "water", ...DYES, "waste"].filter(k => (s[k] || 0) > 1e-4);
+  const liquidCol = rgbOf(s);
+  for(const k of order){ const hgt = 124 * s[k] / STROKE;
+    const col = k === "air" ? "var(--air)" : k === "water" ? "var(--water)" : k === "waste" ? "var(--waste)" : (liquidCol ? rgbCss(liquidCol) : CV[k]);
+    el("rect", {x: cx - 22, y, width: 44, height: Math.max(0, hgt), rx: 4, fill: col, opacity: k === "air" ? .55 : 1}, g); y += hgt; }
+  RIG.vol[p].textContent = `holds ${fmt(total(s))} of 5 mL`;
+}
+function showState(sn){
+  const s = sn || {syr: {1: {}, 2: {}}, vial: {}, valve: {1: 1, 2: 1}};
+  for(const p of [1, 2]){ syringeDraw(p, s.syr[p]); setPointer(p, s.valve[p]); }
+  const v = total(s.vial, true), hgt = 125 * Math.min(v, JOB.vialMax) / JOB.vialMax;
+  RIG.vialFill.setAttribute("y", VIAL[1] + 75 - hgt); RIG.vialFill.setAttribute("height", hgt);
+  RIG.vialFill.setAttribute("fill", rgbCss(rgbOf(s.vial)));
+  const map = ports();
+  $("#readout").innerHTML = [1, 2].map(p => `<div><b>Pump ${p}</b><span>${fmt(total(s.syr[p]))} mL · valve on ${s.valve[p]} (${SHORT[map[p][s.valve[p]]]})</span></div>`).join("")
+    + `<div><b>Vial</b><span>${fmt(v)} mL${v > 0 ? " · " + DYES.filter(d => s.vial[d] > 0.005).map(d => `${fmt(s.vial[d])} ${d}`).join(", ") : ""}</span></div>`;
+}
+
+/* ------------------------------------------------------------ your turn */
+const state0 = () => S.prog.length ? runAll(S.prog, ports()).snaps.at(-1) : {syr: {1: {}, 2: {}}, vial: {}, valve: {1: 1, 2: 1}};
+function describe(a, before){
+  const what = ports()[a.pump][a.port], now = total(before.syr[a.pump]), d = a.to_ml - now;
+  const where = `pump ${a.pump} turns to port ${a.port} (${NAME[what]})`;
+  if(Math.abs(d) < 1e-6) return `${where}; the plunger stays at ${fmt(a.to_ml)} mL`;
+  return d > 0 ? `${where} and <b>draws ${fmt(d)} mL</b> from ${NAME[what]}` : `${where} and <b>pushes ${fmt(-d)} mL</b> into ${NAME[what]}`;
+}
+function markSelected(){
+  for(const k in RIG.dots) RIG.dots[k].classList.toggle("sel", k === `${S.pump}-${S.port}`);
+  $$("#pumpSeg button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.pump === S.pump));
+  const map = ports()[S.pump];
+  $("#portChips").innerHTML = [1, 2, 3, 4, 5, 6].map(k => `<button type="button" class="chip" data-port="${k}" aria-pressed="${k === S.port}"><i style="background:${CV[map[k]]}"></i>${k} · ${SHORT[map[k]]}</button>`).join("");
+  $$("#portChips .chip").forEach(c => c.addEventListener("click", () => pickPort(S.pump, +c.dataset.port, false)));
+  $("#preview").innerHTML = `Next move: ${describe({pump: S.pump, port: S.port, to_ml: S.to}, state0())}.`;
+}
+function pickPort(p, k, fromRig){
+  S.pump = p; S.port = k; markSelected(); hotTube(`${p}-${k}`);
+  const what = ports()[p][k];
+  $("#portCaption").innerHTML = `<b>Pump ${p}, port ${k}</b> has a tube to <b>${NAME[what]}</b>.` + (what === "not connected" ? " Drawing through it would suck in room air." : "");
+  if(fromRig) setTimeout(() => hotTube(null), 1600);
+}
+function setTo(v){ S.to = Math.max(0, Math.min(5, Math.round(v * 100) / 100)); $("#toRange").value = S.to; $("#toNum").value = S.to; markSelected(); }
+function renderProg(active = -1, bad = new Set()){
+  const ol = $("#prog");
+  if(!S.prog.length){ ol.innerHTML = `<li class="empty">Your program is empty. Add the first move above.</li>`; return; }
+  let st = {syr: {1: {}, 2: {}}, vial: {}, valve: {1: 1, 2: 1}};
+  const snaps = runAll(S.prog, ports()).snaps;
+  ol.innerHTML = S.prog.map((a, i) => { const txt = describe(a, st); st = snaps[i];
+    return `<li class="${i === active ? "now" : ""} ${bad.has(i + 1) ? "badmove" : ""}"><span>${txt}</span><button type="button" class="x" data-i="${i}" aria-label="Remove move ${i + 1}">×</button></li>`; }).join("");
+  $$("#prog .x").forEach(b => b.addEventListener("click", () => { if(S.running) return; S.prog.splice(+b.dataset.i, 1); S.lastRun = null; $("#result").hidden = true; renderProg(); markSelected(); showState(S.prog.length ? state0() : null); }));
+}
+function explain(m, t){
+  const out = [];
+  if(!m.checks.safe) t.problems.slice(0, 3).forEach(p => out.push(p.charAt(0).toUpperCase() + p.slice(1) + "."));
+  if(!m.checks["right amounts"]) out.push(`The amounts are off: ${DYES.filter(d => target[d] > 0 || m.got[d] > 0.005).map(d => `${fmt(m.got[d])} mL of ${d} (needs ${fmt(target[d])})`).join(", ")}.`);
+  if(!m.checks["9.8 mL in all"] && m.checks["right amounts"]) out.push(`The vial holds ${fmt(m.total)} mL, not 9.8 mL.`);
+  if(!m.checks["no water"]) out.push("Water got into the mix: it makes the colour paler.");
+  if(!m.checks.stirred) out.push("The vial was never stirred with air after the last dye. Without bubbles the colour stays streaky and the camera reads it wrong. (Which pump is connected to the air line?)");
+  if(!m.checks["syringes empty"]) out.push(`Liquid is left in pump ${m.left.join(" and ")}'s syringe: it would leak into the next job.`);
+  return out;
+}
+async function run(){
+  if(S.running || !S.prog.length) return;
+  S.running = true; $("#runBtn").disabled = true; $("#result").hidden = true;
+  const r = runAll(S.prog, ports()); S.lastRun = r;
+  showState(null);
+  for(let i = 0; i < r.snaps.length && !reduce; i++){
+    renderProg(i); const a = S.prog[i]; hotTube(`${a.pump}-${a.port}`);
+    showState(r.snaps[i]);
+    RIG.bubbles.setAttribute("opacity", ports()[a.pump][a.port] === "vial 1" && i > 0 && (r.snaps[i - 1].syr[a.pump].air || 0) > 0.5 ? 1 : 0);
+    await new Promise(res => setTimeout(res, 720));
+  }
+  hotTube(null); RIG.bubbles.setAttribute("opacity", 0);
+  showState(r.snaps.at(-1)); renderProg(-1, r.t.bad);
+  const m = r.marks, box = $("#result"), tgt = rgbOf(target), got = rgbOf(r.t.vial);
+  box.innerHTML = `<p class="verdict ${m.correct ? "ok" : "no"}">${m.correct ? "Fully correct. The robot would make this purple." : "Not yet. The twin found a problem."}</p>
+    <ul class="checks">${Object.entries(m.checks).map(([k, v]) => `<li class="${v ? "ok" : "no"}">${k}</li>`).join("")}</ul>
+    ${m.correct ? "" : `<ul class="why">${explain(m, r.t).map(x => `<li>${esc(x).replace("(Which pump", "<b>(Which pump").replace("air line?)", "air line?)</b>")}</li>`).join("")}</ul>`}
+    <div class="swatches"><span><i class="sw" style="background:${rgbCss(tgt)}"></i>the job's purple</span><span><i class="sw" style="background:${rgbCss(got)}"></i>your vial (${fmt(m.total)} mL)</span></div>
+    ${m.correct ? "" : `<p class="note">Most LLMs failed here too, mostly by never stirring. The dictionary below is what fixed it.</p>`}`;
+  box.hidden = false; S.running = false; $("#runBtn").disabled = false;
+}
+function loadExample(kind){
+  if(S.running) return;
+  const ex = D.examples[S.plumb] && D.examples[S.plumb][kind];
+  if(!ex) return;
+  S.prog = ex.actions.map(a => ({...a})); S.lastRun = null; $("#result").hidden = true;
+  renderProg(); markSelected(); showState(null); run();
+}
+function exampleLabels(){
+  const ex = D.examples[S.plumb] || {};
+  $("#exAlone").textContent = ex.alone ? `${ex.alone.model}, without the dictionary` : "No example";
+  $("#exOnto").textContent = ex.onto ? `${ex.onto.model}, with the dictionary` : "No example";
+  $("#exAlone").disabled = !ex.alone; $("#exOnto").disabled = !ex.onto;
+}
+$("#job").innerHTML = `<p><b>The job:</b> fill the empty vial with <b>9.8 mL of purple</b>: ${Math.round(JOB.shares.red * 100)}% red and ${Math.round(JOB.shares.blue * 100)}% blue. That means <b>${fmt(target.red)} mL of red</b> and <b>${fmt(target.blue)} mL of blue</b>.</p>
+  <p class="note" style="margin-top:6px">This is one of the four jobs we gave the LLMs. Build it one move at a time, then press Run. A <span class="term">digital twin</span>, a computer copy of the pumps, checks every move.</p>`;
+$$("#pumpSeg button").forEach(b => b.addEventListener("click", () => { S.pump = +b.dataset.pump; markSelected(); }));
+$("#toRange").addEventListener("input", e => setTo(+e.target.value));
+$("#toNum").addEventListener("change", e => setTo(+e.target.value || 0));
+$("#addMove").addEventListener("click", () => { if(S.running || S.prog.length >= 40) return; S.prog.push({pump: S.pump, port: S.port, to_ml: S.to}); S.lastRun = null; $("#result").hidden = true; renderProg(); markSelected(); showState(state0()); });
+$("#undoMove").addEventListener("click", () => { if(S.running) return; S.prog.pop(); S.lastRun = null; $("#result").hidden = true; renderProg(); markSelected(); showState(S.prog.length ? state0() : null); });
+$("#clearBtn").addEventListener("click", () => { if(S.running) return; S.prog = []; S.lastRun = null; $("#result").hidden = true; renderProg(); markSelected(); showState(null); });
+$("#runBtn").addEventListener("click", run);
+$("#exAlone").addEventListener("click", () => loadExample("alone"));
+$("#exOnto").addEventListener("click", () => loadExample("onto"));
+
+/* ------------------------------------------------------------ the dictionary, step by step */
+const onto = $("#onto");
+const THINGS = {water: [500, 42], red: [215, 62], blue: [100, 215], yellow: [790, 62], air: [92, 470], "vial 1": [500, 580], waste: [895, 480], "not connected": [905, 245]};
+const IRI = {water: "WaterBottle", red: "RedBottle", yellow: "YellowBottle", blue: "BlueBottle", air: "Air", "vial 1": "RobotVial1", waste: "Waste", "not connected": "Nothing"};
+const CLS = {water: "Bottle", red: "Bottle", yellow: "Bottle", blue: "Bottle", air: "AirLine", "vial 1": "ColourVial", waste: "WasteBottle", "not connected": "Unconnected"};
+const OP = {1: [320, 318], 2: [680, 318]}, OR = 112;
+const opXY = (p, k, r = OR) => { const a = (-90 + 60 * (k - 1)) * Math.PI / 180; return [OP[p][0] + r * Math.cos(a), OP[p][1] + r * Math.sin(a)]; };
+const STEPS = [
+  {name: "Categories", cap: "First, the <b>categories</b>: the kinds of thing the robot is made of. Syringe pump, valve port, bottle, air line, vial and waste bottle."},
+  {name: "Definitions", cap: "Then a <b>definition</b> for each part of this robot: pump 1 and pump 2 are syringe pumps, each syringe holds 5 mL, and the vial holds 14 mL (a finished colour fills it to 9.8 mL)."},
+  {name: "Relationships", cap: "Then the <b>relationships</b>: which port is connected to which bottle. This is the only part that changes when the tubes are moved. Try configuration 2."},
+  {name: "What follows", cap: "From those relationships a computer can work out new ones, like which pump can reach each bottle (the dashed lines)."},
+  {name: "Good practice", cap: "Last, <b>good practice</b>: what every program must do. These never name a port number. Stirring is defined as <i>the pump connected to the air line pushes air into the vial</i>, so it stays right when the tubes are moved. Tap one to see what it points to."}];
+const GOOD = {   // the good-practice entries in plain words (the OWL beside it is the real one)
+  StirRule: ["Stir", "After the last dye, stir: the pump connected to the air line draws 5 mL of air and pushes it into the vial. The bubbles mix the colour."],
+  ReachRule: ["Which pump", "Each pump can only use what its own ports are connected to. A dye can only come from the pump connected to that dye's bottle."],
+  CapacityRule: ["Syringe size", "A syringe holds at most 5 mL. A bigger amount needs two or more fills: draw, push into the vial, then draw again."],
+  DoseRule: ["Exact amounts", "A mix puts exactly its share of 9.8 mL of each dye into the vial (30% red is 2.94 mL), and no water."],
+  DrawRule: ["Draw from", "Only draw from a bottle, the air line, or the vial. Never from the waste bottle or a port with nothing connected."],
+  PushRule: ["Push into", "Only push into the vial or the waste bottle. Never push liquid back into a dye or water bottle: it would spoil it."],
+  EmptySyringeRule: ["Empty at the end", "Finish with both syringes empty, so nothing leaks into the next job."],
+  MoveRule: ["One move", "A move turns one pump's valve to a port, then sets its plunger to a volume between 0 and 5 mL."]};
+const RULE_HL = {
+  StirRule: m => ({nodes: ["air", "vial 1", "pump" + reachPort(m, "air")[0]], reach: [[reachPort(m, "air")[0], "air"]]}),
+  ReachRule: m => ({nodes: ["red", "yellow", "blue", "pump1", "pump2"], reach: DYES.map(d => [reachPort(m, d)[0], d])}),
+  CapacityRule: () => ({nodes: ["pump1", "pump2"], reach: []}),
+  DoseRule: () => ({nodes: ["vial 1", "red", "blue"], reach: []}),
+  DrawRule: () => ({nodes: ["waste", "not connected"], reach: []}),
+  PushRule: () => ({nodes: ["water", "red", "yellow", "blue", "air"], reach: []}),
+  EmptySyringeRule: () => ({nodes: ["pump1", "pump2"], reach: []}),
+  MoveRule: () => ({nodes: ["pump1", "pump2"], reach: []})};
+function reachPort(map, what){ for(const p of [1, 2]) for(let k = 1; k <= 6; k++) if(map[p][k] === what) return [p, k]; return [0, 0]; }
+function node(g, key, x, y, name, cls, w){
+  const n = el("g", {class: "node inst", "data-k": key}, g), wd = w || Math.max(130, name.length * 13.5 + 36);
+  el("rect", {x: x - wd / 2, y: y - 30, width: wd, height: 60, rx: 14}, n);
+  el("text", {x, y: y - 2, "text-anchor": "middle", class: "nm"}, n, name);
+  el("text", {x, y: y + 20, "text-anchor": "middle", class: "cls"}, n, cls);
+  return n;
+}
+function drawOnto(){
+  onto.innerHTML = "";
+  const map = ports(), st = S.step, L = {};
+  ["classes", "edges", "reach", "insts", "ports", "lab"].forEach(k => L[k] = el("g", {class: "layer"}, onto));
+  const kinds = ["SyringePump", "ValvePort", "Bottle", "AirLine", "ColourVial", "WasteBottle", "Unconnected"];
+  kinds.forEach((c, i) => { const x = 140 + (i % 4) * 240, y = 220 + Math.floor(i / 4) * 160;
+    const n = el("g", {class: "node"}, L.classes); el("rect", {x: x - 112, y: y - 36, width: 224, height: 72, rx: 4}, n);
+    el("text", {x, y: y - 2, "text-anchor": "middle", class: "nm"}, n, c); el("text", {x, y: y + 22, "text-anchor": "middle", class: "cls"}, n, "category"); });
+  L.classes.classList.toggle("off", st !== 0);
+  node(L.insts, "pump1", OP[1][0], OP[1][1], "Pump1", "SyringePump · 5 mL", 186);
+  node(L.insts, "pump2", OP[2][0], OP[2][1], "Pump2", "SyringePump · 5 mL", 186);
+  for(const w in THINGS) if(w !== "not connected" || st >= 2) node(L.insts, w, THINGS[w][0], THINGS[w][1], IRI[w], CLS[w] + (w === "vial 1" ? " · 14 mL" : ""));
+  L.insts.classList.toggle("off", st < 1);
+  for(const p of [1, 2]) for(let k = 1; k <= 6; k++){
+    const [x, y] = opXY(p, k), what = map[p][k], t = THINGS[what];
+    el("path", {d: `M${x} ${y} L${t[0]} ${t[1]}`, class: "edge", "data-k": what, "data-p": p}, L.edges);
+    const g = el("g", {class: "pt"}, L.ports); el("circle", {cx: x, cy: y, r: 18, fill: CV[what]}, g); el("text", {x, y: y + 6, "text-anchor": "middle"}, g, k);
+  }
+  L.edges.classList.toggle("off", st < 2); L.ports.classList.toggle("off", st < 2);
+  for(const p of [1, 2]){ const seen = new Set();
+    for(let k = 1; k <= 6; k++){ const what = map[p][k]; if(what === "not connected" || seen.has(what)) continue; seen.add(what);
+      const t = THINGS[what], [sx, sy] = OP[p], mx = (sx + t[0]) / 2 + (p === 1 ? -40 : 40), my = (sy + t[1]) / 2;
+      el("path", {d: `M${sx} ${sy} Q${mx} ${my} ${t[0]} ${t[1]}`, class: "edge reach", "data-p": p, "data-k": what}, L.reach); } }
+  L.reach.classList.toggle("off", st < 3);
+  if(st === 3){ const [ap] = reachPort(map, "air"); el("text", {x: 500, y: 324, "text-anchor": "middle", class: "elab"}, L.lab, `Pump${ap} reaches Air`); }
+  if(st >= 2) L.edges.style.opacity = st >= 3 ? .45 : 1;
+  if(st === 4){
+    const hl = RULE_HL[S.rule](map), keep = new Set(hl.nodes);
+    $$("#onto .node.inst").forEach(n => { const k = n.dataset.k; n.classList.toggle("hl", keep.has(k)); n.classList.toggle("dimmed", !keep.has(k)); });
+    $$("#onto .edge.reach").forEach(e => { const on = hl.reach.some(([p, w]) => +e.dataset.p === p && e.dataset.k === w); e.classList.toggle("hl", on); e.classList.toggle("dimmed", !on); });
+    $$("#onto .edge:not(.reach)").forEach(e => e.classList.add("dimmed"));
+  }
+}
+function hlTTL(s){ return esc(s).replace(/(&quot;.*?&quot;)/g, '<span class="s">$1</span>').replace(/\b(cm:\w+|owl:\w+|rdfs:\w+)/g, m => `<span class="k">${m}</span>`); }
+function stepTTL(){
+  const f = D.facts[S.plumb], T = D.ttl, st = S.step;
+  const portLines = f.split("\n").filter(l => /^cm:Pump\dPort\d a /.test(l));
+  const reachLines = f.split("\n").filter(l => /^cm:Pump\d cm:reaches/.test(l) || /cm:reachedThrough/.test(l));
+  const blocks = [["# Categories", Object.values(T.classes)], ["# Definitions", T.parts],
+    [`# Relationships (${CONF[S.plumb]})`, portLines], ["# What follows: what each pump can reach", reachLines],
+    [`# Good practice: ${GOOD[S.rule][0]}`, [T.rules[S.rule].ttl]]];
+  $("#ttl").innerHTML = blocks.slice(0, st + 1).map(([head, lines], i) =>
+    `<span class="c">${esc(head)}</span>\n` + lines.map(l => i === st ? `<span class="new">${hlTTL(l)}</span>` : hlTTL(l)).join("\n")).join("\n\n");
+  const nw = $("#ttl .new"); if(nw) $("#ttl").scrollTop = nw.offsetTop - 40;
+  $("#count").textContent = D.counts.statements ? `This is what the dictionary looks like to a computer. The whole of it, chemistry included, has about ${Math.round(D.counts.statements / 10) * 10} entries like these.` : "This is what the dictionary looks like to a computer.";
+}
+function renderStep(){
+  $("#steps").innerHTML = STEPS.map((s, i) => `<button type="button" data-s="${i}" ${i === S.step ? 'aria-current="step"' : ""}><span class="n">${i + 1}</span>${s.name}</button>`).join("");
+  $$("#steps button").forEach(b => b.addEventListener("click", () => { S.step = +b.dataset.s; renderStep(); }));
+  let cap = STEPS[S.step].cap;
+  if(S.step === 3){ const [p, k] = reachPort(ports(), "air"); cap += ` In ${CONF[S.plumb]} only one pump reaches the air line: <b>pump ${p}, through port ${k}</b>.`; }
+  $("#stepCaption").innerHTML = cap;
+  $("#stepBack").disabled = S.step === 0; $("#stepNext").disabled = S.step === STEPS.length - 1;
+  $("#rulebox").hidden = S.step !== 4;
+  if(S.step === 4){
+    $("#rules").innerHTML = Object.keys(GOOD).filter(r => D.ttl.rules[r]).map(r => `<button type="button" data-r="${r}" aria-pressed="${r === S.rule}">${GOOD[r][0]}</button>`).join("");
+    $$("#rules button").forEach(b => b.addEventListener("click", () => { S.rule = b.dataset.r; renderStep(); }));
+    let txt = GOOD[S.rule][1];
+    if(S.rule === "StirRule"){ const [p, k] = reachPort(ports(), "air"); txt += ` In ${CONF[S.plumb]} that is pump ${p}, port ${k}.`; }
+    $("#ruleText").innerHTML = `<b>${GOOD[S.rule][0]}.</b> ${esc(txt)}`;
+  }
+  drawOnto(); stepTTL();
+}
+$("#stepBack").addEventListener("click", () => { S.step = Math.max(0, S.step - 1); renderStep(); });
+$("#stepNext").addEventListener("click", () => { S.step = Math.min(STEPS.length - 1, S.step + 1); renderStep(); });
+
+/* ------------------------------------------------------------ the chemistry */
+$("#lawText").innerHTML = `This is the Beer–Lambert law. The dictionary holds it, with numbers the robot measured itself${D.law.n ? ` from ${D.law.n} of its own colours` : ""}: how strongly each dye blocks red, green and blue light.`;
+$("#dyeTtl").innerHTML = D.ttl.dyes.map(hlTTL).join("\n");
+const absSvg = $("#absChart");
+function drawMix(){
+  const parts = S.mix, sum = parts.reduce((a, b) => a + b, 0) || 1, f = parts.map(x => x / sum);
+  ["r", "y", "b"].forEach((c, i) => { $("#m" + c).value = parts[i]; $("#o" + c).textContent = `${Math.round(100 * f[i])}%`; });
+  const col = parts.some(x => x > 0) ? rgbOf({red: f[0], yellow: f[1], blue: f[2]}) : null;
+  $("#liq").style.backgroundColor = rgbCss(col);
+  absSvg.innerHTML = "";
+  const L = 120, W = 420, max = 1.6, rows = ["red light", "green light", "blue light"], dcol = ["var(--red)", "var(--yellow)", "var(--blue)"];
+  [0, .4, .8, 1.2, 1.6].forEach(v => { const x = L + W * v / max; el("line", {x1: x, x2: x, y1: 10, y2: 186, stroke: "var(--line)"}, absSvg); el("text", {x, y: 206, "text-anchor": "middle", class: "t"}, absSvg, v.toFixed(1)); });
+  rows.forEach((r, c) => { const y = 22 + c * 58; el("text", {x: L - 10, y: y + 22, "text-anchor": "end"}, absSvg, r);
+    let x = L; f.forEach((fi, i) => { const w = W * fi * D.law.E[i][c] / max; if(w > .3){ el("rect", {x, y, width: w, height: 34, fill: dcol[i], rx: 3}, absSvg); x += w; } });
+    const A = f.reduce((a, fi, i) => a + fi * D.law.E[i][c], 0);
+    el("text", {x: Math.min(x + 8, L + W - 4), y: y + 22, "font-size": 14, "font-weight": 600}, absSvg, A.toFixed(2)); });
+  const A = [0, 1, 2].map(c => f.reduce((a, fi, i) => a + fi * D.law.E[i][c], 0));
+  $("#formula").innerHTML = `green light blocked = ${fmt(f[0])} × ${fmt(D.law.E[0][1])} + ${fmt(f[1])} × ${fmt(D.law.E[1][1])} + ${fmt(f[2])} × ${fmt(D.law.E[2][1])} = <b>${fmt(A[1])}</b> &nbsp;(each dye's share × how strongly it blocks, added up)`;
+}
+["r", "y", "b"].forEach((c, i) => $("#m" + c).addEventListener("input", e => { S.mix[i] = +e.target.value; drawMix(); }));
+$("#mixJob").addEventListener("click", () => { S.mix = [7, 0, 3]; drawMix(); });
+$("#mixRandom").addEventListener("click", () => { S.mix = [0, 1, 2].map(() => Math.floor(Math.random() * 11)); if(!S.mix.some(Boolean)) S.mix[0] = 5; drawMix(); });
+
+/* ------------------------------------------------------------ the results */
+const SETUP = ["on its own", "with the dictionary", "with the twin", "with both"];
+$("#method").textContent = `${N.models} LLMs each wrote programs for four jobs, many times over: on their own, with the dictionary, with the digital twin (it tells the LLM what went wrong and lets it try once more), and with both.`;
+const think = D.models.filter(m => m.thinking), quick = D.models.filter(m => !m.thinking);
+const tip = $("#tip");
+function showTip(e, text){ tip.textContent = text; tip.style.opacity = 1; tip.style.left = Math.min(innerWidth - 270, e.clientX + 12) + "px"; tip.style.top = (e.clientY + 14) + "px"; }
+function hideTip(){ tip.style.opacity = 0; }
+function barRows(box, groups, cells, key){
+  box.innerHTML = `<div class="axis"><div></div><div><span>0%</span><span>50%</span><span>100%</span></div><div></div></div>` + key
+    + groups.map(([title, list, note]) => `<div class="group"><h4>${title}<span>${note}</span></h4>${list.map(m => `<div class="bar ${m.thinking ? "" : "nothink"}"><div class="nm">${esc(m.name)}${m.local ? "<small>free, local</small>" : ""}</div><div class="track">${cells(m).map(c => `<div class="fill ${c.cls || ""}" style="width:0%" data-w="${c.v == null ? 0 : c.v}" data-tip="${esc(c.tip)}"></div>`).join("")}</div><div class="v">${cells(m).map(c => pct(c.v)).join(" · ")}</div></div>`).join("")}</div>`).join("");
+  requestAnimationFrame(() => box.querySelectorAll(".fill").forEach(f => { f.style.width = f.dataset.w + "%"; }));
+  box.querySelectorAll(".fill").forEach(f => { f.addEventListener("mousemove", e => showTip(e, f.dataset.tip)); f.addEventListener("mouseleave", hideTip); });
+}
+const avgOf = (list, i) => list.length ? list.reduce((a, m) => a + m.success[i], 0) / list.length : null;
+function renderResults(){
+  const i = S.setup;
+  $$("#setupSeg button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.setup === i));
+  barRows($("#bars"), [["Think before answering", think, `average ${pct(avgOf(think, i))}`], ["Answer straight away", quick, `average ${pct(avgOf(quick, i))}`]],
+    m => [{v: m.success[i], tip: `${m.name}, ${SETUP[i]}: ${pct(m.success[i])} of ${m.n[i]} programs fully correct`}], "");
+  const perfect = think.filter(m => m.success[i] >= 99.95).length;
+  const words = [
+    `On their own, the LLMs got <b>${pct(N.allSuccess[0])}</b> of programs fully right. Most never stirred the vial.`,
+    `With the dictionary, <b>${perfect} of ${think.length}</b> LLMs that think got every program right. Average over all ${N.models}: <b>${pct(N.allSuccess[1])}</b>.`,
+    `The twin helps by trial and error: <b>${pct(N.allSuccess[2])}</b> on average, and ${perfect} of ${think.length} thinking LLMs perfect.`,
+    `With both, <b>${pct(N.allSuccess[3])}</b> on average. The two LLMs that answer straight away need both to get close.`];
+  $("#summary").innerHTML = words[i];
+}
+$("#copyNote").textContent = `Copying a colour improved less, from ${N.allScore[0]} to ${N.allScore[1]} out of 100: the LLMs already knew the chemistry. What they lacked was knowledge of our robot.`;
+$$("#setupSeg button").forEach(b => b.addEventListener("click", () => { S.setup = +b.dataset.setup; renderResults(); }));
+function renderRewire(){
+  const k = S.plumb, lab = CONF[k];
+  const v = (m, j) => m[k] && m[k][j] ? m[k][j][0] : null, n = (m, j) => m[k] && m[k][j] ? m[k][j][1] : 0;
+  const avg = (list, j) => { const xs = list.map(m => v(m, j)).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
+  barRows($("#rewBars"), [["Think before answering", think, `${pct(avg(think, 0))} on their own · ${pct(avg(think, 1))} with the dictionary`], ["Answer straight away", quick, `${pct(avg(quick, 0))} on their own · ${pct(avg(quick, 1))} with the dictionary`]],
+    m => [{v: v(m, 0), cls: "alt half", tip: `${m.name}, ${lab}, on its own: ${pct(v(m, 0))} of ${n(m, 0)}`}, {v: v(m, 1), cls: "half lower", tip: `${m.name}, ${lab}, with the dictionary: ${pct(v(m, 1))} of ${n(m, 1)}`}],
+    `<div class="keyrow"><span><i style="background:var(--muted)"></i>on its own</span><span><i style="background:var(--accent)"></i>with the dictionary</span></div>`);
+  $("#rewSummary").innerHTML = k === "rewired"
+    ? `Configuration 2: the LLMs that think wrote <b>${N.rewiredRight} of ${N.rewiredOf}</b> programs correctly with the dictionary, and ${pct(N.rewiredAlone)} on their own.`
+    : `Configuration 1: the same LLMs in our main test. Switch to configuration 2 to compare.`;
+}
+$("#rewText").textContent = "To check, we moved every tube on the twin to a different port (configuration 2) and changed only the relationships in the dictionary. The categories, definitions and good practice stayed word for word the same. If the dictionary only worked for one set-up, the scores would drop.";
+
+/* ------------------------------------------------------------ one set-up for the whole page */
+function setPlumb(p){
+  if(S.running) return;
+  S.plumb = p; S.prog = []; S.lastRun = null; $("#result").hidden = true;
+  $$("[data-plumb]").forEach(b => b.setAttribute("aria-pressed", b.dataset.plumb === p));
+  drawRig(); renderProg(); exampleLabels(); renderStep(); renderRewire();
+  $("#portCaption").textContent = p === "rewired" ? "Configuration 2: every tube is on a different port. Tap a port to follow its tube." : "Tap a port on the drawing to follow its tube.";
+}
+$$("[data-plumb]").forEach(b => b.addEventListener("click", () => setPlumb(b.dataset.plumb)));
+
+$("#foot").innerHTML = `<p>Every program in our tests ran on a digital twin of the pumps, so the real pumps never moved. A program counts as correct only if it is safe, gets every amount right, fills the vial to 9.8 mL, adds no water, stirs with air after the last dye and leaves both syringes empty: the same checks as on this page. Tests of ${esc(D.date)}.</p>
+  <p>ColourMix v3 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>`;
+
+setPlumb("asPlumbed"); pickPort(1, 2, false); setTo(5); drawMix(); renderResults();
+$("#portCaption").textContent = "Tap a port on the drawing to follow its tube.";
+})();
+</script>
+</body>
+</html>
