@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Robot's Dictionary</title>
+<title>The Lab's Know-how</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="How a dictionary a computer can read (an ontology) taught eleven large language models to program ColourMix's syringe pumps: try the job, watch the dictionary being built, see the results.">
+<meta name="description" content="How a lab's know-how, written down so a computer can read it (an ontology), taught eleven large language models to program ColourMix's syringe pumps: try the job, watch the know-how being written down, see the results.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -148,7 +148,7 @@ svg{display:block;width:100%;height:auto}
 .swatches{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--muted)}
 .sw{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);display:inline-block;vertical-align:middle;margin-right:6px}
 
-/* the dictionary */
+/* the know-how, written as an ontology */
 .parts4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .parts4 div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px}
 .parts4 b{display:block;color:var(--accent)}
@@ -240,7 +240,7 @@ footer p{max-width:90ch}
 <header class="band">
   <div class="wrap hero">
     <p class="eyebrow">ColourMix v3 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>
-    <h1>Can an LLM run a lab robot? <em>Give it a dictionary.</em></h1>
+    <h1>Can an LLM run a lab robot? <em>Give it the lab's know-how.</em></h1>
     <div class="herogrid">
       <p class="lede" id="lede"></p>
       <a class="author" href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">
@@ -249,7 +249,7 @@ footer p{max-width:90ch}
       </a>
     </div>
   </div>
-  <div class="secbar"><nav class="wrap" aria-label="Sections"><a href="#robot">1 The robot</a><a href="#turn">2 Your turn</a><a href="#dictionary">3 The dictionary</a><a href="#chemistry">4 The chemistry</a><a href="#results">5 The result</a><a href="#setups">6 Two set-ups</a><a href="#forms" id="formsNav">7 Which form</a></nav></div>
+  <div class="secbar"><nav class="wrap" aria-label="Sections"><a href="#robot">1 The robot</a><a href="#turn">2 Your turn</a><a href="#dictionary">3 The know-how</a><a href="#chemistry">4 The chemistry</a><a href="#results">5 The result</a><a href="#setups">6 Two set-ups</a><a href="#forms" id="formsNav">7 Which form</a></nav></div>
 </header>
 <main>
 <div class="wrap stats" id="stats"></div>
@@ -293,10 +293,10 @@ footer p{max-width:90ch}
 
 <section class="step wrap" id="dictionary" aria-labelledby="h-dict">
   <div class="text">
-    <p class="eyebrow"><span class="num">3</span>The dictionary</p>
+    <p class="eyebrow"><span class="num">3</span>The know-how</p>
     <h2 id="h-dict">What the LLMs didn't know, written down</h2>
     <p>An LLM has read a lot about chemistry, but it has never seen our robot. It doesn't know that only one pump is connected to the air line, that a syringe holds only 5 mL, or that the vial must be stirred with bubbles.</p>
-    <p>So we wrote a <b>dictionary of the robot</b> for it. Computer scientists call this an <i>ontology</i>. Like any dictionary, it is built from four kinds of entry:</p>
+    <p>So we wrote the lab's <b>know-how</b> down for it, in a form a computer can read. Computer scientists call this an <i>ontology</i>. It is built from four kinds of entry:</p>
     <div class="parts4">
       <div><b>Categories</b>the kinds of thing: pump, port, bottle</div>
       <div><b>Definitions</b>what each part is: pump 1's syringe holds 5 mL</div>
@@ -314,8 +314,8 @@ footer p{max-width:90ch}
     </div>
   </div>
   <div class="work sticky">
-    <div class="card" style="padding:8px"><svg class="onto" id="onto" viewBox="0 0 1000 620" role="img" aria-label="The dictionary as a map of parts and connections"></svg></div>
-    <div class="code" id="ttl" aria-label="The dictionary as written in OWL" tabindex="0"></div>
+    <div class="card" style="padding:8px"><svg class="onto" id="onto" viewBox="0 0 1000 620" role="img" aria-label="The know-how as a map of parts and connections"></svg></div>
+    <div class="code" id="ttl" aria-label="The know-how as written in OWL" tabindex="0"></div>
     <p class="count" id="count"></p>
   </div>
 </section>
@@ -323,7 +323,7 @@ footer p{max-width:90ch}
 <section class="step wrap" id="chemistry" aria-labelledby="h-chem">
   <div class="text">
     <p class="eyebrow"><span class="num">4</span>The chemistry</p>
-    <h2 id="h-chem">The same dictionary explains how colours mix</h2>
+    <h2 id="h-chem">The same know-how explains how colours mix</h2>
     <p>Each dye lets some colours of light through and blocks others. Red dye blocks green and blue light. In a mix, the light blocked by each dye adds up, in proportion to how much of that dye there is.</p>
     <p id="lawText"></p>
     <div class="code" id="dyeTtl"></div>
@@ -347,9 +347,9 @@ footer p{max-width:90ch}
 <section class="step wrap" id="results" aria-labelledby="h-res">
   <div class="text">
     <p class="eyebrow"><span class="num">5</span>The result</p>
-    <h2 id="h-res">How much the dictionary helped</h2>
+    <h2 id="h-res">How much the know-how helped</h2>
     <p id="method"></p>
-    <div class="seg" role="group" aria-label="Help given" id="setupSeg"><button type="button" data-setup="0">On its own</button><button type="button" data-setup="1">+ Dictionary</button><button type="button" data-setup="2">+ Twin</button><button type="button" data-setup="3">+ Both</button></div>
+    <div class="seg" role="group" aria-label="Help given" id="setupSeg"><button type="button" data-setup="0">On its own</button><button type="button" data-setup="1">+ Know-how</button><button type="button" data-setup="2">+ Twin</button><button type="button" data-setup="3">+ Both</button></div>
     <p class="summary" id="summary" aria-live="polite"></p>
     <p class="note" id="copyNote"></p>
   </div>
@@ -361,7 +361,7 @@ footer p{max-width:90ch}
 <section class="step wrap" id="setups" aria-labelledby="h-rew">
   <div class="text">
     <p class="eyebrow"><span class="num">6</span>Two set-ups</p>
-    <h2 id="h-rew">Does the dictionary only work for one set-up?</h2>
+    <h2 id="h-rew">Does the know-how only work for one set-up?</h2>
     <p id="rewText"></p>
     <div class="seg" role="group" aria-label="Set-up"><button type="button" data-plumb="asPlumbed">Configuration 1</button><button type="button" data-plumb="rewired">Configuration 2</button></div>
     <p class="summary" id="rewSummary" aria-live="polite"></p>
@@ -374,8 +374,8 @@ footer p{max-width:90ch}
 <section class="step wrap" id="forms" aria-labelledby="h-forms">
   <div class="text">
     <p class="eyebrow"><span class="num">7</span>Which form</p>
-    <h2 id="h-forms">Does the dictionary have to be in a computer's language?</h2>
-    <p>We gave the LLMs the same jobs with the dictionary in five forms: nothing at all; the dictionary itself, written in Turtle, a language for computers; every one of its facts as a plain English sentence; only its good-practice rules; and a short fact sheet for the job, written by a reasoner, a program that works out what follows from the dictionary (which pump can reach the air line, for example).</p>
+    <h2 id="h-forms">Does the know-how have to be in a computer's language?</h2>
+    <p>We gave the LLMs the same jobs with the know-how in five forms: nothing at all; the ontology itself, written in Turtle, a language for computers; every one of its facts as a plain English sentence; only its good-practice rules; and a short fact sheet for the job, written by a reasoner, a program that works out what follows from the ontology (which pump can reach the air line, for example).</p>
     <div class="seg" role="group" aria-label="Measure" id="formsSeg"><button type="button" data-fm="right">How often right</button><button type="button" data-fm="read">How much it read</button></div>
     <p class="summary" id="formsSummary" aria-live="polite"></p>
     <p class="note" id="formsNote"></p>
@@ -391,9 +391,9 @@ footer p{max-width:90ch}
     <h2 id="h-why">Write the lab's knowledge down once, and an LLM can use it</h2>
   </div>
   <div class="text">
-    <p>Labs run on knowledge that lives in people's heads: which tube goes where, what you must never do, how much a syringe holds. Written down as a dictionary a computer can read, that knowledge can be used by people and LLMs alike, checked automatically, and updated in one place when the lab changes.</p>
-    <p id="whyForms">If plain English works as well, why write the dictionary in a computer's language? Because programs can use it too. In our test the plain-English version and the reasoner's fact sheet were both made from it, and when a tube moves, every version changes with it.</p>
-    <p>ColourMix is a small, safe version of a big question for automated labs: can an LLM be trusted to drive real equipment? On their own, even the strongest LLMs made mistakes a technician never would. With the robot's dictionary, the ones that think before answering stopped making them.</p>
+    <p>Labs run on knowledge that lives in people's heads: which tube goes where, what you must never do, how much a syringe holds. Written down so a computer can read it, as an ontology, that know-how can be used by people and LLMs alike, checked automatically, and updated in one place when the lab changes.</p>
+    <p id="whyForms">If plain English works as well, why write the know-how in a computer's language? Because programs can use it too. In our test the plain-English version and the reasoner's fact sheet were both made from the ontology, and when a tube moves, every version changes with it.</p>
+    <p>ColourMix is a small, safe version of a big question for automated labs: can an LLM be trusted to drive real equipment? On their own, even the strongest LLMs made mistakes a technician never would. With the lab's know-how, the ones that think before answering stopped making them.</p>
   </div>
 </section>
 </main>
@@ -494,7 +494,7 @@ window.__twin = {runAll, target};
 
 /* ------------------------------------------------------------ the top */
 const ts = N.thinkSuccess;
-$("#lede").textContent = `Large language models (LLMs), the AI behind chatbots, have read a lot about chemistry, but they have never seen our robot. We asked ${N.models} LLMs to write the programs for its two syringe pumps. On their own, most got them wrong. With a dictionary of the robot, written as an ontology, they got them right.${D.forms ? " What mattered was the knowledge, not the language it was written in." : ""} Try the job yourself below.`;
+$("#lede").textContent = `Large language models (LLMs), the AI behind chatbots, have read a lot about chemistry, but they have never seen our robot. We asked ${N.models} LLMs to write the programs for its two syringe pumps. On their own, most got them wrong. Given the lab's know-how, written down as an ontology, they got them right.${D.forms ? " What mattered was the know-how, not the language it was written in." : ""} Try the job yourself below.`;
 const stats = [[`${pct(ts[0])} <span>→ ${pct(ts[1])}</span>`, `pump programs fully correct, for the ${N.thinking} LLMs that think before they answer`]];
 if(N.rewiredOf) stats.push([`${N.rewiredRight} <span>of ${N.rewiredOf}</span>`, `programs still correct after we moved every tube (configuration 2)`]);
 if(N.free) stats.push([`${pct(N.free.alone)} <span>→ ${pct(N.free.onto)}</span>`, `${esc(N.free.name)}, a free LLM running on our own computer`]);
@@ -657,7 +657,7 @@ async function run(){
     <ul class="checks">${Object.entries(m.checks).map(([k, v]) => `<li class="${v ? "ok" : "no"}">${k}</li>`).join("")}</ul>
     ${m.correct ? "" : `<ul class="why">${explain(m, r.t).map(x => `<li>${esc(x).replace("(Which pump", "<b>(Which pump").replace("air line?)", "air line?)</b>")}</li>`).join("")}</ul>`}
     <div class="swatches"><span><i class="sw" style="background:${rgbCss(tgt)}"></i>the job's purple</span><span><i class="sw" style="background:${rgbCss(got)}"></i>your vial (${fmt(m.total)} mL)</span></div>
-    ${m.correct ? "" : `<p class="note">Most LLMs failed here too, mostly by never stirring. The dictionary below is what fixed it.</p>`}`;
+    ${m.correct ? "" : `<p class="note">Most LLMs failed here too, mostly by never stirring. The know-how below is what fixed it.</p>`}`;
   box.hidden = false; S.running = false; $("#runBtn").disabled = false;
 }
 function loadExample(kind){
@@ -669,8 +669,8 @@ function loadExample(kind){
 }
 function exampleLabels(){
   const ex = D.examples[S.plumb] || {};
-  $("#exAlone").textContent = ex.alone ? `${ex.alone.model}, without the dictionary` : "No example";
-  $("#exOnto").textContent = ex.onto ? `${ex.onto.model}, with the dictionary` : "No example";
+  $("#exAlone").textContent = ex.alone ? `${ex.alone.model}, without the know-how` : "No example";
+  $("#exOnto").textContent = ex.onto ? `${ex.onto.model}, with the know-how` : "No example";
   $("#exAlone").disabled = !ex.alone; $("#exOnto").disabled = !ex.onto;
 }
 $("#job").innerHTML = `<p><b>The job:</b> fill the empty vial with <b>9.8 mL of purple</b>: ${Math.round(JOB.shares.red * 100)}% red and ${Math.round(JOB.shares.blue * 100)}% blue. That means <b>${fmt(target.red)} mL of red</b> and <b>${fmt(target.blue)} mL of blue</b>.</p>
@@ -685,7 +685,7 @@ $("#runBtn").addEventListener("click", run);
 $("#exAlone").addEventListener("click", () => loadExample("alone"));
 $("#exOnto").addEventListener("click", () => loadExample("onto"));
 
-/* ------------------------------------------------------------ the dictionary, step by step */
+/* ------------------------------------------------------------ the know-how (ontology), step by step */
 const onto = $("#onto");
 const THINGS = {water: [500, 42], red: [215, 62], blue: [100, 215], yellow: [790, 62], air: [92, 470], "vial 1": [500, 580], waste: [895, 480], "not connected": [905, 245]};
 const IRI = {water: "WaterBottle", red: "RedBottle", yellow: "YellowBottle", blue: "BlueBottle", air: "Air", "vial 1": "RobotVial1", waste: "Waste", "not connected": "Nothing"};
@@ -768,7 +768,7 @@ function stepTTL(){
   $("#ttl").innerHTML = blocks.slice(0, st + 1).map(([head, lines], i) =>
     `<span class="c">${esc(head)}</span>\n` + lines.map(l => i === st ? `<span class="new">${hlTTL(l)}</span>` : hlTTL(l)).join("\n")).join("\n\n");
   const nw = $("#ttl .new"); if(nw) $("#ttl").scrollTop = nw.offsetTop - 40;
-  $("#count").textContent = D.counts.statements ? `This is what the dictionary looks like to a computer. The whole of it, chemistry included, has about ${Math.round(D.counts.statements / 10) * 10} entries like these.` : "This is what the dictionary looks like to a computer.";
+  $("#count").textContent = D.counts.statements ? `This is what the know-how looks like to a computer, written as an ontology. The whole of it, chemistry included, has about ${Math.round(D.counts.statements / 10) * 10} entries like these.` : "This is what the know-how looks like to a computer, written as an ontology.";
 }
 function renderStep(){
   $("#steps").innerHTML = STEPS.map((s, i) => `<button type="button" data-s="${i}" ${i === S.step ? 'aria-current="step"' : ""}><span class="n">${i + 1}</span>${s.name}</button>`).join("");
@@ -791,7 +791,7 @@ $("#stepBack").addEventListener("click", () => { S.step = Math.max(0, S.step - 1
 $("#stepNext").addEventListener("click", () => { S.step = Math.min(STEPS.length - 1, S.step + 1); renderStep(); });
 
 /* ------------------------------------------------------------ the chemistry */
-$("#lawText").innerHTML = `This is the Beer–Lambert law. The dictionary holds it, with numbers the robot measured itself${D.law.n ? ` from ${D.law.n} of its own colours` : ""}: how strongly each dye blocks red, green and blue light.`;
+$("#lawText").innerHTML = `This is the Beer–Lambert law. The ontology holds it, with numbers the robot measured itself${D.law.n ? ` from ${D.law.n} of its own colours` : ""}: how strongly each dye blocks red, green and blue light.`;
 $("#dyeTtl").innerHTML = D.ttl.dyes.map(hlTTL).join("\n");
 const absSvg = $("#absChart");
 function drawMix(){
@@ -814,8 +814,8 @@ $("#mixJob").addEventListener("click", () => { S.mix = [7, 0, 3]; drawMix(); });
 $("#mixRandom").addEventListener("click", () => { S.mix = [0, 1, 2].map(() => Math.floor(Math.random() * 11)); if(!S.mix.some(Boolean)) S.mix[0] = 5; drawMix(); });
 
 /* ------------------------------------------------------------ the results */
-const SETUP = ["on its own", "with the dictionary", "with the twin", "with both"];
-$("#method").textContent = `${N.models} LLMs each wrote programs for four jobs, many times over: on their own, with the dictionary, with the digital twin (it tells the LLM what went wrong and lets it try once more), and with both.`;
+const SETUP = ["on its own", "with the know-how", "with the twin", "with both"];
+$("#method").textContent = `${N.models} LLMs each wrote programs for four jobs, many times over: on their own, with the know-how, with the digital twin (it tells the LLM what went wrong and lets it try once more), and with both.`;
 const think = D.models.filter(m => m.thinking), quick = D.models.filter(m => !m.thinking);
 const tip = $("#tip");
 function showTip(e, text){ tip.textContent = text; tip.style.opacity = 1; tip.style.left = Math.min(innerWidth - 270, e.clientX + 12) + "px"; tip.style.top = (e.clientY + 14) + "px"; }
@@ -835,7 +835,7 @@ function renderResults(){
   const perfect = think.filter(m => m.success[i] >= 99.95).length;
   const words = [
     `On their own, the LLMs got <b>${pct(N.allSuccess[0])}</b> of programs fully right. Most never stirred the vial.`,
-    `With the dictionary, <b>${perfect} of ${think.length}</b> LLMs that think got every program right. Average over all ${N.models}: <b>${pct(N.allSuccess[1])}</b>.`,
+    `With the know-how, <b>${perfect} of ${think.length}</b> LLMs that think got every program right. Average over all ${N.models}: <b>${pct(N.allSuccess[1])}</b>.`,
     `The twin helps by trial and error: <b>${pct(N.allSuccess[2])}</b> on average, and ${perfect} of ${think.length} thinking LLMs perfect.`,
     `With both, <b>${pct(N.allSuccess[3])}</b> on average. The two LLMs that answer straight away need both to get close.`];
   $("#summary").innerHTML = words[i];
@@ -846,19 +846,19 @@ function renderRewire(){
   const k = S.plumb, lab = CONF[k];
   const v = (m, j) => m[k] && m[k][j] ? m[k][j][0] : null, n = (m, j) => m[k] && m[k][j] ? m[k][j][1] : 0;
   const avg = (list, j) => { const xs = list.map(m => v(m, j)).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
-  barRows($("#rewBars"), [["Think before answering", think, `${pct(avg(think, 0))} on their own · ${pct(avg(think, 1))} with the dictionary`], ["Answer straight away", quick, `${pct(avg(quick, 0))} on their own · ${pct(avg(quick, 1))} with the dictionary`]],
-    m => [{v: v(m, 0), cls: "alt half", tip: `${m.name}, ${lab}, on its own: ${pct(v(m, 0))} of ${n(m, 0)}`}, {v: v(m, 1), cls: "half lower", tip: `${m.name}, ${lab}, with the dictionary: ${pct(v(m, 1))} of ${n(m, 1)}`}],
-    `<div class="keyrow"><span><i style="background:var(--muted)"></i>on its own</span><span><i style="background:var(--accent)"></i>with the dictionary</span></div>`);
+  barRows($("#rewBars"), [["Think before answering", think, `${pct(avg(think, 0))} on their own · ${pct(avg(think, 1))} with the know-how`], ["Answer straight away", quick, `${pct(avg(quick, 0))} on their own · ${pct(avg(quick, 1))} with the know-how`]],
+    m => [{v: v(m, 0), cls: "alt half", tip: `${m.name}, ${lab}, on its own: ${pct(v(m, 0))} of ${n(m, 0)}`}, {v: v(m, 1), cls: "half lower", tip: `${m.name}, ${lab}, with the know-how: ${pct(v(m, 1))} of ${n(m, 1)}`}],
+    `<div class="keyrow"><span><i style="background:var(--muted)"></i>on its own</span><span><i style="background:var(--accent)"></i>with the know-how</span></div>`);
   $("#rewSummary").innerHTML = k === "rewired"
-    ? `Configuration 2: the LLMs that think wrote <b>${N.rewiredRight} of ${N.rewiredOf}</b> programs correctly with the dictionary, and ${pct(N.rewiredAlone)} on their own.`
+    ? `Configuration 2: the LLMs that think wrote <b>${N.rewiredRight} of ${N.rewiredOf}</b> programs correctly with the know-how, and ${pct(N.rewiredAlone)} on their own.`
     : `Configuration 1: the same LLMs in our main test. Switch to configuration 2 to compare.`;
 }
-$("#rewText").textContent = "To check, we moved every tube on the twin to a different port (configuration 2) and changed only the relationships in the dictionary. The categories, definitions and good practice stayed word for word the same. If the dictionary only worked for one set-up, the scores would drop.";
+$("#rewText").textContent = "To check, we moved every tube on the twin to a different port (configuration 2) and changed only the relationships in the ontology. The categories, definitions and good practice stayed word for word the same. If the know-how only worked for one set-up, the scores would drop.";
 
 /* ------------------------------------------------------------ which form (the forms test) */
 const FM = D.forms;
-const FORM_NAME = {alone: "Nothing", turtle: "The dictionary", english: "Plain English", rules: "Rules only", reasoner: "Reasoner's sheet"};
-const FORM_WITH = {turtle: "the dictionary in Turtle", english: "plain English", rules: "the good-practice rules", reasoner: "the reasoner's sheet"};
+const FORM_NAME = {alone: "Nothing", turtle: "The ontology", english: "Plain English", rules: "Rules only", reasoner: "Reasoner's sheet"};
+const FORM_WITH = {turtle: "the ontology in Turtle", english: "plain English", rules: "the good-practice rules", reasoner: "the reasoner's sheet"};
 const num = v => v == null ? "–" : Math.round(v).toLocaleString("en-GB");
 function renderForms(){
   if(!FM) return;
@@ -875,12 +875,12 @@ function renderForms(){
   const T = f => by[f] && by[f].think;
   if(!read){
     $("#formsSummary").innerHTML = T("english") && T("turtle") && T("alone")
-      ? `The LLMs that think got <b>${pct(T("english").right)}</b> of programs right with plain English and <b>${pct(T("turtle").right)}</b> with the dictionary in Turtle, against ${pct(T("alone").right)} with nothing. The knowledge matters, not the language.`
+      ? `The LLMs that think got <b>${pct(T("english").right)}</b> of programs right with plain English and <b>${pct(T("turtle").right)}</b> with the ontology in Turtle, against ${pct(T("alone").right)} with nothing. It's the know-how that matters, not the language.`
       : "";
   } else {
     const r = T("reasoner"), t = T("turtle");
     $("#formsSummary").innerHTML = r && t
-      ? `The reasoner's sheet was just as good: <b>${pct(r.right)}</b> right from <b>${num(r.read)}</b> tokens of reading (pieces of words), instead of ${num(t.read)} for the whole dictionary`
+      ? `The reasoner's sheet was just as good: <b>${pct(r.right)}</b> right from <b>${num(r.read)}</b> tokens of reading (pieces of words), instead of ${num(t.read)} for the whole ontology`
         + (r.pence && t.pence ? `, and about <b>${Math.round(100 * (1 - r.pence / t.pence))}%</b> cheaper per question.` : ".")
       : "";
   }
