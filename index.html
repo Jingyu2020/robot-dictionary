@@ -77,6 +77,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 .author .who{display:grid;gap:2px;font-size:14.5px;color:var(--band-muted);min-width:0}
 .author .who b{font-size:17px;color:var(--band-ink)}
 .author .who u{text-decoration:none;color:var(--band-accent);font-weight:600}
+.side{display:grid;gap:12px;min-width:0}
+/* 'Star on GitHub': in the header and the footer; the count shows once there is a star (never in the visitor app) */
+.ghstar{display:inline-flex;align-items:center;gap:8px;justify-self:start;text-decoration:none;font-weight:600;font-size:14.5px;line-height:1.2;border-radius:999px;padding:8px 15px 8px 13px;border:1px solid var(--line);color:var(--ink);background:var(--panel)}
+.ghstar svg{width:17px;height:17px;flex:none;color:var(--accent);fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.ghstar:hover{border-color:var(--accent)}
+.ghstar:hover svg{fill:currentColor}
+.ghstar .count{font:600 12.5px/1 var(--f-mono);padding:3px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.band .ghstar{border-color:var(--band-line);color:var(--band-ink);background:transparent}
+.band .ghstar svg{color:var(--band-accent)}
+.band .ghstar:hover{border-color:var(--band-accent)}
+.band .ghstar .count{background:var(--band-line);color:var(--band-ink)}
+footer .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-bottom:6px;font-size:15px;color:var(--ink)}
 .secbar{border-top:1px solid var(--band-line)}
 .secbar nav{display:flex;gap:4px 18px;overflow-x:auto;padding-block:12px;font-size:14.5px;font-weight:600;white-space:nowrap}
 .secbar a{text-decoration:none;color:var(--band-muted)}
@@ -251,10 +263,13 @@ footer p{max-width:90ch}
     <h1>Can an LLM run a lab robot? <em>Give it the lab's know-how.</em></h1>
     <div class="herogrid">
       <p class="lede" id="lede"></p>
-      <a class="author" href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">
-        <span class="avatar"><span class="initials" aria-hidden="true">JF</span><img id="photo" alt="Jingyu Feng" hidden></span>
-        <span class="who"><b>Dr Jingyu Feng</b><span>Facility Manager, DIGIBAT</span><span>Department of Chemical Engineering, Imperial College London</span><u>Profile ↗</u></span>
-      </a>
+      <div class="side">
+        <a class="author" href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">
+          <span class="avatar"><span class="initials" aria-hidden="true">JF</span><img id="photo" alt="Jingyu Feng" hidden></span>
+          <span class="who"><b>Dr Jingyu Feng</b><span>Facility Manager, DIGIBAT</span><span>Department of Chemical Engineering, Imperial College London</span><u>Profile ↗</u></span>
+        </a>
+        <a class="ghstar" href="https://github.com/Jingyu2020/robot-dictionary" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.84 5.76 6.36.92-4.6 4.49 1.08 6.33L12 17.31l-5.68 2.99 1.08-6.33-4.6-4.49 6.36-.92z"/></svg>Star on GitHub<span class="count" hidden></span></a>
+      </div>
     </div>
   </div>
   <div class="secbar"><nav class="wrap" aria-label="Sections"><a href="#robot">1 The robot</a><a href="#turn">2 Your turn</a><a href="#dictionary">3 The know-how</a><a href="#chemistry">4 The chemistry</a><a href="#results">5 The result</a><a href="#setups">6 Two set-ups</a><a href="#forms" id="formsNav">7 Which form</a></nav></div>
@@ -913,12 +928,22 @@ $$("[data-plumb]").forEach(b => b.addEventListener("click", () => setPlumb(b.dat
 
 $("#foot").innerHTML = `<p>Every program in our tests ran on a digital twin of the pumps, so the real pumps never moved. A program counts as correct only if it is safe, gets every amount right, fills the vial to 9.8 mL, adds no water, stirs with air after the last dye and leaves both syringes empty: the same checks as on this page. Tests of ${esc(D.date)}${D.forms && D.forms.date && D.forms.date !== D.date ? `; the forms test, ${esc(D.forms.date)}` : ""}.</p>
   <p>ColourMix v3 · built for RSM 175 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>`;
+{ const cta = document.createElement("div"); cta.className = "cta";
+  cta.append($(".band .ghstar").cloneNode(true), Object.assign(document.createElement("span"), {textContent: "Found it useful? A star on GitHub helps other people find it."}));
+  $("#foot").prepend(cta); }
 
 setPlumb("asPlumbed"); pickPort(1, 2, false); setTo(5); drawMix(); renderResults();
 $("#portCaption").textContent = "Tap a port on the drawing to follow its tube.";
-// inside the ColourMix visitor app (?inapp=1): links to other websites would leave the stand's screen, so they are plain text there
-if (new URLSearchParams(location.search).has("inapp"))
+// inside the ColourMix visitor app (?inapp=1): links to other websites would leave the stand's screen, so they are plain text
+// there, and the 'Star on GitHub' buttons go
+if (new URLSearchParams(location.search).has("inapp")) {
+  document.querySelectorAll(".ghstar, footer .cta").forEach(e => e.remove());
   document.querySelectorAll('a[href^="http"]').forEach(a => { a.removeAttribute("href"); a.removeAttribute("target"); a.style.cursor = "default"; });
+} else                                     // on the web: how many stars so far (shown from the first one)
+  fetch("https://api.github.com/repos/Jingyu2020/robot-dictionary").then(r => r.ok ? r.json() : null).then(j => {
+    const n = j && j.stargazers_count;
+    if (n > 0) document.querySelectorAll(".ghstar .count").forEach(c => { c.textContent = n.toLocaleString("en-GB"); c.hidden = false; });
+  }).catch(() => {});
 })();
 </script>
 </body>
