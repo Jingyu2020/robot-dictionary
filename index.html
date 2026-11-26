@@ -6,35 +6,43 @@
 <title>The Lab's Know-how</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="How a lab's know-how, written down so a computer can read it (an ontology), taught eleven large language models to program ColourMix's syringe pumps: try the job, watch the know-how being written down, see the results.">
+<meta name="theme-color" content="#000080">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Can an LLM run a lab robot? Give it the lab's know-how.">
+<meta property="og:description" content="How a lab's know-how, written down so a computer can read it (an ontology), taught eleven large language models to program ColourMix's syringe pumps: try the job, watch the know-how being written down, see the results.">
+<meta property="og:url" content="https://jingyu2020.github.io/robot-dictionary/">
+<meta property="og:image" content="https://jingyu2020.github.io/robot-dictionary/preview.png">
+<meta property="og:image:width" content="2400"><meta property="og:image:height" content="1260">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: an institutional page (a header band with the author, a section bar, then numbered sections), in a bottle-
-   green and paper palette of its own; each section pairs short reading (left) with something to try (right), stacked on
-   phones. The three dyes keep their own colours. */
+/* Layout: an institutional page (a header band with the author, a section bar, then numbered sections), in Imperial's
+   colours (a Navy band, Imperial Blue for every action, White Smoke paper; the fonts stay open ones); each section pairs
+   short reading (left) with something to try (right), stacked on phones. The three dyes keep their own colours. */
 :root{
-  --bg:#f6f5f0; --panel:#ffffff; --sunk:#ecebe3; --ink:#16201c; --muted:#56615b; --line:#d8d8cd;
-  --band:#0f3d33; --band-ink:#f2f1e9; --band-muted:#bccbc2; --band-accent:#a4e3bf; --band-line:#2b5a4e;
-  --accent:#0e6a4e; --accent-ink:#ffffff; --accent-soft:#d6ece1; --good:#17733a; --bad:#b3261e;
-  --code-bg:#132019; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#24443a;
+  --bg:#f5f5f5; --panel:#ffffff; --sunk:#ebecf3; --ink:#232333; --muted:#5b6676; --line:#d5dae0;
+  --band:#000080; --band-ink:#ffffff; --band-muted:#c9cbf0; --band-accent:#00bfff; --band-line:#1f1f9a;
+  --accent:#0000cd; --accent-ink:#ffffff; --accent-soft:#e6e6fa; --good:#006400; --bad:#dc143c;
+  --code-bg:#0b0b3b; --code-fg:#eef0ff; --code-key:#8fd3ff; --code-str:#ffd479; --code-dim:#8f93c0; --code-hi:#1d1d6b;
   --red:#d42a3c; --yellow:#efb400; --blue:#2453d6; --water:#6fbfe2; --air:#a8b2ad; --waste:#7b6a54; --nothing:#a2a69b; --vial:#16201c;
   --f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --r:12px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0e1412; --panel:#151d1a; --sunk:#1c2622; --ink:#e7eee9; --muted:#a7b5ae; --line:#2c3833;
-  --band:#0a2a22; --band-ink:#eef3ef; --band-muted:#a9bdb2; --band-accent:#8fdcae; --band-line:#22463c;
-  --accent:#6fd3a2; --accent-ink:#06231a; --accent-soft:#1f3a31; --good:#5fca86; --bad:#ff8174;
-  --code-bg:#0a110e; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#1f3a31;
+  --bg:#0b0b1e; --panel:#13132c; --sunk:#1b1b3a; --ink:#ececf6; --muted:#a9aec8; --line:#2b2b52;
+  --band:#05054a; --band-ink:#ffffff; --band-muted:#b9bce6; --band-accent:#00bfff; --band-line:#1c1c70;
+  --accent:#7b8cff; --accent-ink:#00002e; --accent-soft:#1d1d55; --good:#5cc97a; --bad:#ff6b81;
+  --code-bg:#07071c; --code-fg:#eef0ff; --code-key:#8fd3ff; --code-str:#ffd479; --code-dim:#8f93c0; --code-hi:#1d1d55;
   --red:#ef4458; --yellow:#f6c21c; --blue:#5b84ff; --water:#7fcbec; --air:#8b958f; --waste:#9c8a71; --nothing:#7a7f75; --vial:#e7eee9;
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0e1412; --panel:#151d1a; --sunk:#1c2622; --ink:#e7eee9; --muted:#a7b5ae; --line:#2c3833;
-  --band:#0a2a22; --band-ink:#eef3ef; --band-muted:#a9bdb2; --band-accent:#8fdcae; --band-line:#22463c;
-  --accent:#6fd3a2; --accent-ink:#06231a; --accent-soft:#1f3a31; --good:#5fca86; --bad:#ff8174;
-  --code-bg:#0a110e; --code-fg:#e8efe9; --code-key:#93d8b3; --code-str:#f2c879; --code-dim:#7f948a; --code-hi:#1f3a31;
+  --bg:#0b0b1e; --panel:#13132c; --sunk:#1b1b3a; --ink:#ececf6; --muted:#a9aec8; --line:#2b2b52;
+  --band:#05054a; --band-ink:#ffffff; --band-muted:#b9bce6; --band-accent:#00bfff; --band-line:#1c1c70;
+  --accent:#7b8cff; --accent-ink:#00002e; --accent-soft:#1d1d55; --good:#5cc97a; --bad:#ff6b81;
+  --code-bg:#07071c; --code-fg:#eef0ff; --code-key:#8fd3ff; --code-str:#ffd479; --code-dim:#8f93c0; --code-hi:#1d1d55;
   --red:#ef4458; --yellow:#f6c21c; --blue:#5b84ff; --water:#7fcbec; --air:#8b958f; --waste:#9c8a71; --nothing:#7a7f75; --vial:#e7eee9;
   color-scheme:dark}
 *{box-sizing:border-box}
@@ -239,7 +247,7 @@ footer p{max-width:90ch}
 <body>
 <header class="band">
   <div class="wrap hero">
-    <p class="eyebrow">ColourMix v3 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>
+    <p class="eyebrow">ColourMix v3 · built for RSM 175 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>
     <h1>Can an LLM run a lab robot? <em>Give it the lab's know-how.</em></h1>
     <div class="herogrid">
       <p class="lede" id="lede"></p>
@@ -904,7 +912,7 @@ function setPlumb(p){
 $$("[data-plumb]").forEach(b => b.addEventListener("click", () => setPlumb(b.dataset.plumb)));
 
 $("#foot").innerHTML = `<p>Every program in our tests ran on a digital twin of the pumps, so the real pumps never moved. A program counts as correct only if it is safe, gets every amount right, fills the vial to 9.8 mL, adds no water, stirs with air after the last dye and leaves both syringes empty: the same checks as on this page. Tests of ${esc(D.date)}${D.forms && D.forms.date && D.forms.date !== D.date ? `; the forms test, ${esc(D.forms.date)}` : ""}.</p>
-  <p>ColourMix v3 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>`;
+  <p>ColourMix v3 · built for RSM 175 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>`;
 
 setPlumb("asPlumbed"); pickPort(1, 2, false); setTo(5); drawMix(); renderResults();
 $("#portCaption").textContent = "Tap a port on the drawing to follow its tube.";
