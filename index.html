@@ -99,6 +99,57 @@ footer .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding
 .stat .big span{color:var(--accent)}
 .stat p{margin-top:8px;font-size:15px;color:var(--muted)}
 
+/* at a glance: every LLM as a dot, moving as the help changes; then the steps, in order */
+.glance{display:grid;gap:16px;padding-block:clamp(30px,4vw,46px) 8px;scroll-margin-top:10px}
+.ghead{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:end;justify-content:space-between}
+.ghead>div{display:grid;gap:10px;min-width:0}
+.ghead p{max-width:70ch}
+.ggrid{display:grid;grid-template-columns:minmax(0,2.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.gchart{padding:12px 14px 12px;display:grid;gap:8px;min-width:0}
+.gchart svg{overflow:visible;touch-action:manipulation}
+.gchart svg text{font-family:var(--f-body);font-size:12.5px;fill:var(--muted)}
+.gchart .gtitle{fill:var(--ink);font-weight:600;font-size:13px}
+.gchart .ggrid line{stroke:var(--line)}
+.gchart .base{stroke:var(--accent);stroke-width:1.5}
+.gchart .bandr{fill:var(--accent-soft)}
+.gchart .bandt{fill:var(--accent);font-weight:700;font-size:12px;letter-spacing:.06em}
+.gdot .vis{fill:var(--accent);stroke:var(--panel);stroke-width:2;transition:r .15s}
+.gdot.quick .vis{fill:var(--panel);stroke:var(--accent);stroke-width:2.5}
+.gdot .hit{fill:transparent;cursor:pointer}
+.gdot,.gtrail,.gghost{transition:opacity .25s}
+.gtrail{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:3 4;fill:none;opacity:.38}
+.gghost{fill:none;stroke:var(--muted);stroke-width:1.5;opacity:.6}
+.gchart .off{opacity:0}
+.gchart.focus .gdot:not(.on),.gchart.focus .gtrail:not(.on),.gchart.focus .gghost:not(.on){opacity:.15}
+.gchart.focus .gtrail.on{opacity:1}
+.glegend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:var(--muted);padding-inline:4px}
+.glegend i{display:inline-block;box-sizing:border-box;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:var(--accent)}
+.glegend i.q{background:var(--panel);border:2.5px solid var(--accent)}
+.glegend i.tr{width:20px;height:0;border-radius:0;border-top:2px dashed var(--accent);background:none;vertical-align:3px}
+.gside{display:grid;gap:10px;align-content:start;min-width:0}
+.gside .summary{font-size:18px;min-height:0;padding:2px 2px 4px}
+.gstat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 16px;min-width:0}
+.gstat .big{font:800 clamp(30px,2.9vw,40px)/1 var(--f-body);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gstat .big span{font-size:.5em;font-weight:700;letter-spacing:0;color:var(--muted)}
+.gstat p{margin-top:6px;font-size:14px;color:var(--muted)}
+.gstat .delta{margin-top:4px;font-weight:700;font-size:13.5px;color:var(--accent)}
+.gtable summary{cursor:pointer;font-weight:600;color:var(--accent);font-size:14.5px;width:max-content;max-width:100%}
+.gtable .tw{overflow-x:auto;margin-top:10px}
+.gtable table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.gtable th,.gtable td{text-align:right;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.gtable th:first-child,.gtable td:first-child{text-align:left}
+.gtable th{font-size:12.5px;color:var(--muted);font-weight:700}
+.gtable small{color:var(--muted);font-size:12px;margin-left:6px}
+.flowwrap{display:grid;gap:16px;padding-block:clamp(26px,3.5vw,40px) clamp(32px,4.5vw,56px)}
+.flowwrap h3{margin:0;font:800 clamp(21px,2vw,26px)/1.2 var(--f-body);letter-spacing:-.01em}
+.flow{--n:7;list-style:none;margin:0;padding:0;position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:12px}
+.flow::before{content:"";position:absolute;top:14px;left:15px;right:calc((100% - (var(--n) - 1) * 12px) / var(--n) - 15px);height:2px;background:var(--line)}
+.flow a{position:relative;display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);border-radius:10px}
+.flow .num{margin:0;box-shadow:0 0 0 4px var(--bg)}
+.flow b{font-size:15.5px;line-height:1.25}
+.flow .d{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.flow a:hover b{color:var(--accent)}
+
 /* a section */
 .step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3.4vw,48px);padding-block:clamp(36px,5vw,64px);border-top:1px solid var(--line);align-items:start;scroll-margin-top:10px}
 .step>.text{display:grid;gap:16px;align-content:start;min-width:0}
@@ -252,6 +303,19 @@ footer p{max-width:90ch}
   #formsBars .bar,#formsBars .axis{grid-template-columns:minmax(0,132px) minmax(0,1fr) 48px}
   .mixer{grid-template-columns:minmax(0,1fr)}
   .flask{margin:0 auto}
+  .ggrid{grid-template-columns:minmax(0,1fr)}
+  .gside{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gside .summary{grid-column:1/-1}
+  .flow{grid-template-columns:minmax(0,1fr);gap:16px}
+  .flow::before{top:15px;bottom:15px;left:14px;right:auto;width:2px;height:auto}
+  .flow a{grid-template-columns:30px minmax(0,1fr);column-gap:14px;row-gap:2px}
+  .flow .num{grid-row:span 2}
+}
+@media (max-width:600px){
+  .gside{grid-template-columns:minmax(0,1fr)}
+  .gstat{display:grid;grid-template-columns:5.2em minmax(0,1fr);column-gap:12px;align-items:center;padding:11px 14px}
+  .gstat .big{grid-row:span 2;font-size:28px}
+  .gstat p{margin-top:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -276,6 +340,38 @@ footer p{max-width:90ch}
 </header>
 <main>
 <div class="wrap stats" id="stats"></div>
+
+<section class="wrap glance" id="glance" aria-labelledby="h-glance">
+  <div class="ghead">
+    <div>
+      <p class="eyebrow">At a glance</p>
+      <h2 id="h-glance">Watch what the know-how does</h2>
+      <p id="glanceIntro"></p>
+    </div>
+    <div class="row">
+      <div class="seg" role="group" aria-label="Help given to the LLMs" id="glanceSeg"><button type="button" data-g="0">On its own</button><button type="button" data-g="1">+ Know-how</button><button type="button" data-g="2">+ Twin</button><button type="button" data-g="3">+ Both</button></div>
+      <button type="button" class="btn" id="glancePlay">▶ Play all four</button>
+    </div>
+  </div>
+  <div class="ggrid">
+    <figure class="card gchart" id="gchart" style="margin:0">
+      <svg id="gsvg" role="img" aria-labelledby="gsvgTitle"><title id="gsvgTitle"></title></svg>
+      <figcaption class="glegend"><span><i></i>thinks before answering</span><span><i class="q"></i>answers straight away</span><span><i class="tr"></i>moved from where it was on its own</span><span>Tap a dot to see which LLM</span></figcaption>
+    </figure>
+    <div class="gside">
+      <p class="summary" id="gSummary" aria-live="polite"></p>
+      <div class="gstat"><div class="big" id="gPump"></div><p>of pump programs fully correct, average of the <span id="gN"></span> LLMs</p><p class="delta" id="gPumpD"></p></div>
+      <div class="gstat"><div class="big" id="gCopy"></div><p>colour copy score out of 100, average</p><p class="delta" id="gCopyD"></p></div>
+      <div class="gstat"><div class="big" id="gPerfect"></div><p>LLMs got every pump program right</p></div>
+    </div>
+  </div>
+  <details class="gtable"><summary>See the numbers as a table</summary><div class="tw" id="gTable"></div></details>
+</section>
+
+<div class="wrap flowwrap">
+  <h3>Then explore it, step by step</h3>
+  <ol class="flow" id="flow"></ol>
+</div>
 
 <section class="step split wrap" id="robot" aria-labelledby="h-robot">
   <div class="text p1">
@@ -925,6 +1021,144 @@ function setPlumb(p){
   $("#portCaption").textContent = p === "rewired" ? "Configuration 2: every tube is on a different port. Tap a port to follow its tube." : "Tap a port on the drawing to follow its tube.";
 }
 $$("[data-plumb]").forEach(b => b.addEventListener("click", () => setPlumb(b.dataset.plumb)));
+
+/* ------------------------------------------------------------ at a glance: each LLM a dot; up = its pump programs (our
+   equipment), right = its colour copy score (the chemistry). Dots at 100% stack in the band above the 100% line. */
+(() => {
+  const svg = $("#gsvg"), box = $("#gchart"), M = D.models, NAMES = ["On its own", "+ Know-how", "+ Twin", "+ Both"];
+  const ok = m => m.success.every(v => v != null) && m.score.every(v => v != null), ms = M.filter(ok);
+  if(!ms.length){ $("#glance").hidden = true; return; }
+  const X0 = Math.min(87, Math.floor(Math.min(...ms.flatMap(m => m.score)) - 0.5)), X1 = 100;
+  let G = {i: 0, cur: null, anim: 0, play: 0, w: 0, nodes: [], lay: null};
+  const perfect = i => ms.filter(m => m.success[i] >= 99.95).length;
+  const avg = (i, k) => ms.reduce((a, m) => a + m[k][i], 0) / ms.length;
+  $("#gN").textContent = ms.length;
+  $("#glanceIntro").textContent = `Each dot is one of the ${ms.length} LLMs. Higher means more of its pump programs were fully correct: does it know our equipment? Further right means it copied a colour better: does it know the chemistry? Press the buttons and watch the dots move.`;
+
+  function geometry(){
+    const W = Math.max(300, Math.round(box.clientWidth - 28)), small = W < 560;
+    const R0 = small ? 5.5 : 7.5, L = small ? 38 : 44, R = small ? 10 : 16, H = small ? 380 : Math.round(Math.min(500, Math.max(420, W * .6)));
+    const px = v => L + (v - X0) / (X1 - X0) * (W - L - R);
+    // the band: as many rows as the busiest set-up needs
+    const rowsFor = i => { const xs = ms.filter(m => m.success[i] >= 99.95).map(m => px(m.score[i])).sort((a, b) => a - b), rows = [];
+      xs.forEach(x => { let r = 0; while((rows[r] || []).some(o => Math.abs(o - x) < 2 * R0 + 2.5)) r++; (rows[r] = rows[r] || []).push(x); }); return rows.length; };
+    const nRows = Math.max(1, ...[0, 1, 2, 3].map(rowsFor)), bandTop = 26, bandH = Math.max(50, nRows * (2 * R0 + 3) + 14), T = bandTop + bandH, B = 46;
+    const py = v => T + (1 - v / 100) * (H - T - B);
+    return {W, H, R0, L, R, T, B, bandTop, small, px, py};
+  }
+  function layout(g, i){
+    const pts = ms.map(m => ({x: g.px(m.score[i]), y: 0, top: m.success[i] >= 99.95}));
+    const rows = [];
+    pts.map((p, k) => [p, k]).filter(([p]) => p.top).sort((a, b) => a[0].x - b[0].x).forEach(([p]) => {
+      let r = 0; while((rows[r] || []).some(o => Math.abs(o - p.x) < 2 * g.R0 + 2.5)) r++; (rows[r] = rows[r] || []).push(p.x);
+      p.y = g.T - g.R0 - 7 - r * (2 * g.R0 + 3); });
+    pts.forEach((p, k) => { if(!p.top) p.y = g.py(ms[k].success[i]); });
+    return pts;
+  }
+  function build(){
+    const g = geometry(); G.g = g; G.w = box.clientWidth;
+    svg.setAttribute("viewBox", `0 0 ${g.W} ${g.H}`); svg.setAttribute("width", g.W); svg.setAttribute("height", g.H);
+    svg.querySelectorAll(":scope > :not(title)").forEach(e => e.remove());
+    const grid = el("g", {class: "ggrid"}, svg);
+    el("text", {x: 0, y: 13, class: "gtitle"}, svg, g.small ? "↑ Pump programs fully correct" : "↑ Pump programs fully correct (our equipment)");
+    [0, 25, 50, 75].forEach(v => { el("line", {x1: g.L, x2: g.W - g.R, y1: g.py(v), y2: g.py(v)}, grid); el("text", {x: g.L - 8, y: g.py(v) + 4, "text-anchor": "end"}, svg, `${v}%`); });
+    for(let v = g.small ? Math.ceil(X0 / 2) * 2 : Math.ceil(X0); v <= X1; v += (g.small ? 2 : 1)){ el("line", {x1: g.px(v), x2: g.px(v), y1: g.T, y2: g.H - g.B}, grid);
+      el("text", {x: g.px(v), y: g.H - g.B + 18, "text-anchor": "middle"}, svg, v); }
+    el("text", {x: g.W - g.R, y: g.H - 6, "text-anchor": "end", class: "gtitle"}, svg, g.small ? "Colour copy score (chemistry) →" : "Colour copy score, out of 100 (the chemistry) →");
+    el("rect", {x: g.L, y: g.bandTop, width: g.W - g.L - g.R, height: g.T - g.bandTop, rx: 8, class: "bandr"}, svg);
+    el("text", {x: g.L + 12, y: g.bandTop + 20, class: "bandt"}, svg, g.small ? "EVERY PROGRAM RIGHT" : "EVERY PUMP PROGRAM RIGHT");
+    el("text", {x: g.L + 12, y: g.bandTop + 37}, svg, "dots in this band are all at 100%");
+    el("line", {x1: g.L, x2: g.W - g.R, y1: g.T, y2: g.T, class: "base"}, svg);
+    el("text", {x: g.L - 8, y: g.T + 4, "text-anchor": "end"}, svg, "100%");
+    const start = layout(g, 0), trails = el("g", {}, svg), dots = el("g", {}, svg);
+    G.nodes = ms.map((m, k) => {
+      const tr = el("line", {x1: start[k].x, y1: start[k].y, x2: start[k].x, y2: start[k].y, class: "gtrail"}, trails);
+      const gh = el("circle", {cx: start[k].x, cy: start[k].y, r: g.R0 * .55, class: "gghost"}, trails);
+      const d = el("g", {class: `gdot${m.thinking ? "" : " quick"}`, tabindex: 0, role: "img", "aria-label": m.name}, dots);
+      el("circle", {r: g.R0 + 8, class: "hit"}, d); el("circle", {r: g.R0, class: "vis"}, d);
+      const show = e => { clearOn(); box.classList.add("focus"); [tr, gh, d].forEach(x => x.classList.add("on"));
+        const i = G.i, cap = t => t[0].toUpperCase() + t.slice(1);
+        const w = [`${m.name}${m.local ? ", free, runs on our own computer" : ""}`, `${cap(SETUP[i])}: ${pct(m.success[i])} of pump programs fully correct, colour copy score ${m.score[i].toFixed(1)}`];
+        if(i) w.push(`On its own: ${pct(m.success[0])}, ${m.score[0].toFixed(1)}.`);
+        const r = d.getBoundingClientRect(); showTip(e && e.clientX != null ? e : {clientX: r.right, clientY: r.bottom}, w.join(". ")); };
+      d.addEventListener("pointerenter", show); d.addEventListener("pointermove", e => { if(e.pointerType !== "touch") show(e); });
+      d.addEventListener("pointerleave", e => { if(e.pointerType !== "touch") unfocus(); });
+      d.addEventListener("click", show); d.addEventListener("focus", () => show()); d.addEventListener("blur", unfocus);
+      return {tr, gh, d, m};
+    });
+    G.cur = layout(g, G.i); place(G.cur); trailsOn(G.i);
+  }
+  function clearOn(){ svg.querySelectorAll(".on").forEach(x => x.classList.remove("on")); }
+  function unfocus(){ clearOn(); box.classList.remove("focus"); hideTip(); }
+  document.addEventListener("pointerdown", e => { if(box.classList.contains("focus") && !e.target.closest(".gdot")) unfocus(); });
+  function place(pts){ pts.forEach((p, k) => { const n = G.nodes[k]; n.d.setAttribute("transform", `translate(${p.x.toFixed(1)},${p.y.toFixed(1)})`);
+    n.tr.setAttribute("x2", p.x.toFixed(1)); n.tr.setAttribute("y2", p.y.toFixed(1)); }); }
+  function trailsOn(i){ G.nodes.forEach(n => { n.tr.classList.toggle("off", !i); n.gh.classList.toggle("off", !i); }); }
+  function numbers(i){ $("#gPump").textContent = pct(avg(i, "success")); $("#gCopy").textContent = avg(i, "score").toFixed(1); }
+  function words(i){
+    const tp = ms.filter(m => m.thinking && m.success[i] >= 99.95).length, nt = ms.filter(m => m.thinking).length, quick = ms.filter(m => !m.thinking);
+    return [
+      `<b>On its own,</b> each LLM gets only the question. Just ${pct(avg(0, "success"))} of the programs were fully correct.`,
+      `<b>+ Know-how:</b> we also give it the lab's know-how, written down as an ontology. ${tp === nt ? `All ${nt}` : `${tp} of ${nt}`} LLMs that think before answering got every program right.`,
+      `<b>+ Twin:</b> a digital twin of the pumps runs each program first, and if it is wrong the LLM tries again. ${avg(2, "success") < avg(1, "success") ? "It helps, but less than the know-how." : "It helps too."}`,
+      `<b>+ Both:</b> the know-how and the twin together.${quick.length ? ` Even the LLMs that answer straight away got ${pct(Math.min(...quick.map(m => m.success[3])))} or more right.` : ""}`][i];
+  }
+  function go(i, animate = true){
+    const from = G.cur, to = layout(G.g, i), f0 = G.i; G.i = i; cancelAnimationFrame(G.anim);
+    $$("#glanceSeg button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.g === i));
+    $("#gSummary").innerHTML = words(i);
+    const d0 = avg(0, "success"), c0 = avg(0, "score"), dp = Math.round(avg(i, "success") - d0), dc = avg(i, "score") - c0;
+    $("#gPumpD").textContent = i ? (dp >= 0 ? `▲ ${dp} points more than on its own` : `▼ ${-dp} points fewer than on its own`) : "where they start";
+    $("#gCopyD").textContent = i ? (dc >= 0 ? `▲ ${dc.toFixed(1)} more than on its own` : `▼ ${(-dc).toFixed(1)} less than on its own`) : "where they start";
+    $("#gPerfect").innerHTML = `${perfect(i)} <span>of ${ms.length}</span>`;
+    $("#gsvgTitle").textContent = `${NAMES[i]}: ${pct(avg(i, "success"))} of pump programs fully correct on average, colour copy score ${avg(i, "score").toFixed(1)}; ${perfect(i)} of ${ms.length} LLMs got every program right.`;
+    trailsOn(i);
+    if(!animate || reduce || !from){ G.cur = to; place(to); numbers(i); return; }
+    const t0 = performance.now(), dur = 950, lag = 35, ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const frame = now => {
+      let done = true;
+      G.cur = to.map((p, k) => { const t = Math.max(0, Math.min(1, (now - t0 - k * lag) / dur)); if(t < 1) done = false; const e = ease(t);
+        return {x: from[k].x + (p.x - from[k].x) * e, y: from[k].y + (p.y - from[k].y) * e}; });
+      place(G.cur);
+      const tt = ease(Math.min(1, (now - t0) / (dur + lag * ms.length)));
+      const a = k => avg(f0, k) + (avg(i, k) - avg(f0, k)) * tt;
+      $("#gPump").textContent = pct(a("success")); $("#gCopy").textContent = a("score").toFixed(1);
+      if(!done) G.anim = requestAnimationFrame(frame);
+    };
+    G.anim = requestAnimationFrame(frame);
+  }
+  function stop(){ clearTimeout(G.play); G.play = 0; $("#glancePlay").textContent = "▶ Play all four"; }
+  function play(){
+    if(G.play){ stop(); return; }
+    $("#glancePlay").textContent = "■ Stop";
+    const seq = [0, 1, 2, 3]; let j = 0;
+    const next = () => { go(seq[j++]); G.play = j < seq.length ? setTimeout(next, j === 1 ? 1300 : 2300) : setTimeout(stop, 1500); };
+    next();
+  }
+  $$("#glanceSeg button").forEach(b => b.addEventListener("click", () => { stop(); go(+b.dataset.g); }));
+  $("#glancePlay").addEventListener("click", play);
+  build(); go(reduce ? 1 : 0, false);
+  if(window.ResizeObserver) new ResizeObserver(() => { if(Math.abs(box.clientWidth - G.w) > 1){ cancelAnimationFrame(G.anim); build(); numbers(G.i); } }).observe(box);
+  // the first time the chart comes into view, the dots move from 'on its own' to 'with the know-how'
+  if(!reduce && window.IntersectionObserver){
+    const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); setTimeout(() => { if(G.i === 0 && !G.play) go(1); }, 900); } }, {threshold: .55});
+    io.observe(svg);
+  } else if(!reduce) go(1, false);
+
+  // the same numbers as a table
+  $("#gTable").innerHTML = `<table><thead><tr><th>LLM</th>${NAMES.map(n => `<th>${n}</th>`).join("")}</tr></thead><tbody>${ms.map(m =>
+    `<tr><td>${esc(m.name)}${m.local ? "<small>free, local</small>" : ""}</td>${m.success.map((v, i) => `<td>${pct(v)} · ${m.score[i].toFixed(1)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+    <p class="note" style="margin-top:8px">Each cell: pump programs fully correct · colour copy score out of 100.</p>`;
+
+  // then the steps, in order (the sections the page has)
+  const DESC = {robot: "Follow each tube between the two pumps", turn: "Write the pump program and run it on the twin",
+    dictionary: "See the lab's know-how written down", chemistry: "Mix the dyes and see the colour",
+    results: "How much the know-how helped each LLM", setups: "Move every tube: does it still work?", forms: "Does the language it is written in matter?"};
+  const links = $$(".secbar nav a").filter(a => !(a.id === "formsNav" && !D.forms));
+  $("#flow").style.setProperty("--n", links.length);
+  $("#flow").innerHTML = links.map(a => { const id = a.getAttribute("href").slice(1), [n, ...t] = a.textContent.split(" ");
+    return `<li><a href="#${id}"><span class="num">${esc(n)}</span><b>${esc(t.join(" "))}</b><span class="d">${esc(DESC[id] || "")}</span></a></li>`; }).join("");
+})();
 
 $("#foot").innerHTML = `<p>Every program in our tests ran on a digital twin of the pumps, so the real pumps never moved. A program counts as correct only if it is safe, gets every amount right, fills the vial to 9.8 mL, adds no water, stirs with air after the last dye and leaves both syringes empty: the same checks as on this page. Tests of ${esc(D.date)}${D.forms && D.forms.date && D.forms.date !== D.date ? `; the forms test, ${esc(D.forms.date)}` : ""}.</p>
   <p>ColourMix v3 · built for RSM 175 · <a href="https://profiles.imperial.ac.uk/j.feng19" target="_blank" rel="noopener">Jingyu Feng</a> · DIGIBAT, Imperial College London</p>`;
